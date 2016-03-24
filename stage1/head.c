@@ -68,12 +68,121 @@ int get_bit_of_ip(struct m_ip bit_temp,int num_bit)
 		return 0;
 }
 
+int get_one_colum_all_ip(struct m_ip src_ip[],int count_ip,int stor_ip_bit[32][5],int get_bit_time)
+{
+	static int j = 0;
+	int i = 0;
+	
+	for(i = 0;i<count_ip;i++)
+	{
+		stor_ip_bit[i][get_bit_time+1] = get_bit_of_ip(src_ip[i],j);
+	}
+	j++;
+}
+#if 0
+//verify whther the colum statisfy the need or not,if it is ok,then return 1 or return 0
+int verify(short int a[num_ip][4],int re_time)
+{
+	int valure = 0;
+	int i = 0,j = 0,temp = 0;
+	int repeat_time = 0;
+	for(i = 0;i < num_ip;i++)
+	{
+		a[i][0] = a[i][1] + a[i][2] * 2 + a[i][3] * 2 * 2 + a[i][4]*2*2*2 + a[i][5] * 2*2*2*2; 
+	}
+	//bubble sort
+	for(i = 0;i < 5;i++)
+	{
+		for(j = i+1;j < 5;j++)
+		{
+			if(a[i][0] > a[j][0])
+			{
+				temp = a[i][0];
+				a[i][0] = a[j][0];
+				a[j][0] = temp;
+			}
+		}
+	}
+
+	temp = 0;
+	for(j = 0;j < 8;j++)
+	{
+		for(i = 0;i<5;i++)
+		{
+			if(temp == a[i][0])
+			{
+				repeat_time ++;
+			}
+		}
+		//printf("temp:%d repeat_time:%d \n",temp,repeat_time);
+		if(repeat_time > re_time)
+		{
+			return 0;
+			//break;
+		}
+		repeat_time = 0;
+		temp++;
+	}
+
+	return 1;
+
+}
+#endif
 
 int get_flag_bit(struct m_ip src_ip[],int count_ip,int stor_flag_bit[])
 {
 
-	printf("bit21:%d\n",get_bit_of_ip(src_ip[0],22));
+	//printf("bit22:%d\n",get_bit_of_ip(src_ip[0],22));
+#if 1
+	int num_flag = 0;
+	int stor_ip_bit[32][5]= {{0}};//stor one colum bit of each ip
+	if(count_ip <5&&count_ip > 2)
+	{
+		num_flag = 2;
+	}
+	else if (count_ip < 9&&count_ip>4)
+	{	
+		num_flag = 3;
+	}
+	else if(count_ip > 8&&count_ip<17)
+	{
+		num_flag = 4;
+	}
+	else if (count_ip>16&&count_ip < 33)
+	{
+		num_flag = 5;
+	}
+	else
+	{
+		printf("num of ip bigger than 32\n");
+	}
+	
+	int i =0,j = 0;
+	for(i = 0;i<num_flag;i++)
+	{
+		get_one_colum_all_ip(src_ip,count_ip,stor_ip_bit,i);
+	}
+	
+	for(j = 0;j<num_flag;j++)
+	{
+		for(i = 0;i<count_ip;i++)
+		{
+			printf("stor_ip_bit[%d]:%d  ",i,stor_ip_bit[i][j+1]);
+		}
+		printf("\n");
+	}
+	printf("\n");
 
+#if 0
+	int temp[count_ip][num_flag +1];
+	int i = 0;
+	for(i = 0;i<count_ip;i++)
+	{
+		//for()
+	}
+#endif	
+#endif		
+	
 
 
 
