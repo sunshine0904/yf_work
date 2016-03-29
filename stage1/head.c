@@ -3,20 +3,20 @@
 #include <string.h>
 #include "head.h"
 
-
+int count_ip = 0;
 int get_count_ip(FILE *fp)
 {
 	char *buff = (char *)malloc(25);
-	int count_ip = 0;
+	int count = 0;
 
 	while(fgets(buff,20,fp)!=NULL)
 	{
-		count_ip ++;
+		count ++;
 	}
 	fseek(fp,0,SEEK_SET);
 	free(buff);
 
-	return count_ip;
+	return count;
 }
 
 //strtok the string and storage the result to struct m_ip
@@ -68,7 +68,7 @@ int get_bit_of_ip(struct m_ip bit_temp,int num_bit)
 		return 0;
 }
 
-int get_one_colum_all_ip(struct m_ip src_ip[],int count_ip,int stor_ip_bit[32][5],int get_bit_time)
+int get_one_colum_all_ip(struct m_ip src_ip[],int stor_ip_bit[32][5],int get_bit_time)
 {
 	static int j = 0;
 	int i = 0;
@@ -79,57 +79,55 @@ int get_one_colum_all_ip(struct m_ip src_ip[],int count_ip,int stor_ip_bit[32][5
 	}
 	j++;
 }
-#if 0
-//verify whther the colum statisfy the need or not,if it is ok,then return 1 or return 0
-int verify(short int a[num_ip][4],int re_time)
+#if 1
+//statistic the same element
+int num_of_the_same(int a[count_ip][5])
 {
-	int valure = 0;
-	int i = 0,j = 0,temp = 0;
-	int repeat_time = 0;
-	for(i = 0;i < num_ip;i++)
+	int i = 0,j = 0,same_time = 0,temp = 0;
+	printf("func:%s\n",__func__);
+	for(i = 0;i < count_ip;i++)
 	{
-		a[i][0] = a[i][1] + a[i][2] * 2 + a[i][3] * 2 * 2 + a[i][4]*2*2*2 + a[i][5] * 2*2*2*2; 
+		printf("%d\n",a[i][0]);
 	}
-	//bubble sort
-	for(i = 0;i < 5;i++)
+	
+	for(i = 0;i<count_ip;i++)
 	{
-		for(j = i+1;j < 5;j++)
+		temp = a[i][0];
+		for(j = 0;j<count_ip;j++)
 		{
-			if(a[i][0] > a[j][0])
+			if(temp == a[j][0])
 			{
-				temp = a[i][0];
-				a[i][0] = a[j][0];
-				a[j][0] = temp;
+				same_time ++;
 			}
 		}
+		printf("same_time:%d\n",same_time);
+		same_time = 0;
 	}
 
-	temp = 0;
-	for(j = 0;j < 8;j++)
-	{
-		for(i = 0;i<5;i++)
-		{
-			if(temp == a[i][0])
-			{
-				repeat_time ++;
-			}
-		}
-		//printf("temp:%d repeat_time:%d \n",temp,repeat_time);
-		if(repeat_time > re_time)
-		{
-			return 0;
-			//break;
-		}
-		repeat_time = 0;
-		temp++;
-	}
-
-	return 1;
-
+	
+		
 }
 #endif
 
-int get_flag_bit(struct m_ip src_ip[],int count_ip,int stor_flag_bit[])
+#if 1
+//verify whther the colum statisfy the need or not,if it is ok,then return 1 or return 0
+int verify(int a[count_ip][5])
+{
+	int i = 0,j = 0,temp = 0;
+	for(i = 0;i < count_ip;i++)
+	{
+		a[i][0] = a[i][1] + a[i][2] * 2 + a[i][3] * 2 * 2 + a[i][4]*2*2*2 + a[i][5] * 2*2*2*2; 
+	}
+	for(i = 0;i< count_ip;i++)
+	{
+		printf("%d\n",a[i][0]);
+	}
+	num_of_the_same(a);	
+	return 1;
+}
+#endif
+
+int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[])
 {
 
 	//printf("bit22:%d\n",get_bit_of_ip(src_ip[0],22));
@@ -154,33 +152,26 @@ int get_flag_bit(struct m_ip src_ip[],int count_ip,int stor_flag_bit[])
 	}
 	else
 	{
-		printf("num of ip bigger than 32\n");
+		printf("count_ip:%d . num of ip bigger than 32\n",count_ip);
 	}
 	
 	int i =0,j = 0;
 	for(i = 0;i<num_flag;i++)
 	{
-		get_one_colum_all_ip(src_ip,count_ip,stor_ip_bit,i);
+		get_one_colum_all_ip(src_ip,stor_ip_bit,i);
 	}
 	
-	for(j = 0;j<num_flag;j++)
+	for(j = 0;j<count_ip;j++)
 	{
-		for(i = 0;i<count_ip;i++)
+		for(i = 0;i<num_flag;i++)
 		{
-			printf("stor_ip_bit[%d]:%d  ",i,stor_ip_bit[i][j+1]);
+			printf("ip[%d]bit[%d]:%d  ",j,i,stor_ip_bit[j][i+1]);
 		}
 		printf("\n");
 	}
-	printf("\n");
+	verify(stor_ip_bit);
 
-#if 0
-	int temp[count_ip][num_flag +1];
-	int i = 0;
-	for(i = 0;i<count_ip;i++)
-	{
-		//for()
-	}
-#endif	
+
 #endif		
 	
 

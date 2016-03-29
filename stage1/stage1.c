@@ -6,7 +6,7 @@
 int main()
 {
 	FILE *fps;
-	int count_ip = 0,i = 0,j = 0;
+	int i = 0,j = 0;
 	char buffer[25];
 
 	//open ip file
@@ -38,7 +38,7 @@ int main()
 		printf("\n");
 	}
 #endif	
-	get_flag_bit(src_ip,count_ip,stor_flag_bit);	
+	get_flag_bit(src_ip,stor_flag_bit);	
 
 	return 0;
 }

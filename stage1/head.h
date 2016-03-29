@@ -40,10 +40,13 @@ struct encrypt_ip
 };
 #pragma pack()
 
+extern int count_ip;
+
+
 int get_count_ip(FILE *fp);
 void split_str(char *buf,struct m_ip stemp[]);
 int get_bit_of_ip(struct m_ip bit_temp,int num_bit);
-int get_flag_bit(struct m_ip src_ip[],int count_ip,int stor_flag_bit[]);
+int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[]);
 #if 0
 //void dectobin(int num)
 int is_zero(int a,int b);
