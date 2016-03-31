@@ -41,7 +41,7 @@ struct encrypt_ip
 #pragma pack()
 
 extern int count_ip;
-
+extern int stor_ip_bit[32][6];
 
 int get_count_ip(FILE *fp);
 void split_str(char *buf,struct m_ip stemp[]);

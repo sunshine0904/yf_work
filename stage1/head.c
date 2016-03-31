@@ -4,6 +4,8 @@
 #include "head.h"
 
 int count_ip = 0;
+int stor_ip_bit[32][6] = {{0}};
+
 int get_count_ip(FILE *fp)
 {
 	char *buff = (char *)malloc(25);
@@ -68,7 +70,7 @@ int get_bit_of_ip(struct m_ip bit_temp,int num_bit)
 		return 0;
 }
 
-int get_one_colum_all_ip(struct m_ip src_ip[],int stor_ip_bit[32][6],int get_bit_time)
+int get_one_colum_all_ip(struct m_ip src_ip[],int get_bit_time)
 {
 	static int j = 0;
 	int i = 0;
@@ -77,6 +79,8 @@ int get_one_colum_all_ip(struct m_ip src_ip[],int stor_ip_bit[32][6],int get_bit
 	{
 		stor_ip_bit[i][get_bit_time+1] = get_bit_of_ip(src_ip[i],j);
 
+		//printf("i:%d get_bit_time+1:%d value:%d\n",i,get_bit_time+1,get_bit_of_ip(src_ip[i],j));
+		
 		printf("ip%d bit%d %d ",i,j,get_bit_of_ip(src_ip[i],j));
 	}
 	printf("\n");
@@ -89,12 +93,11 @@ int get_one_colum_all_ip(struct m_ip src_ip[],int stor_ip_bit[32][6],int get_bit
 #endif
 	j++;
 	//printf("j-1:%d  ",j-1);
-	printf("\n");
 	return (j-1);
 }
 #if 1
 //statistic the same element
-int num_of_the_same(int a[count_ip][5])
+int num_of_the_same()
 {
 	int i = 0,j = 0,same_time = 0,temp = 0,max_time = 0;
 #if 0
@@ -107,10 +110,10 @@ int num_of_the_same(int a[count_ip][5])
 	
 	for(i = 0;i<count_ip;i++)
 	{
-		temp = a[i][0];
+		temp = stor_ip_bit[i][0];
 		for(j = 0;j<count_ip;j++)
 		{
-			if(temp == a[j][0])
+			if(temp == stor_ip_bit[j][0])
 			{
 				same_time ++;
 			}
@@ -126,20 +129,33 @@ int num_of_the_same(int a[count_ip][5])
 
 #if 1
 //verify whther the colum statisfy the need or not,if it is ok,then return 1 or return 0
-int verify(int a[count_ip][5])
+int verify()
 {
 	int i = 0,j = 0,temp = 0,num_same = 0;
+	
+	for(i = 0;i < 5;i++)
+	{
+		for(j = 0;j<6;j++)
+		{
+			printf("%d ",stor_ip_bit[i][j]);
+		}
+		printf("\n");
+	}
+		
+	
 	for(i = 0;i < count_ip;i++)
 	{
-		a[i][0] = a[i][1] + a[i][2] * 2 + a[i][3] * 2 * 2 + a[i][4]*2*2*2 + a[i][5] * 2*2*2*2; 
+	
+		stor_ip_bit[i][0] = stor_ip_bit[i][1] + stor_ip_bit[i][2] * 2 + stor_ip_bit[i][3] * 2 * 2 + stor_ip_bit[i][4]*2*2*2 + stor_ip_bit[i][5] * 2*2*2*2; 
+		//printf("sum:%d %d %d %d %d %d\n",stor_ip_bit[i][0],stor_ip_bit[i][1],stor_ip_bit[i][2],stor_ip_bit[i][3],stor_ip_bit[i][4],stor_ip_bit[i][5]);
 	}
 #if 0
 	for(i = 0;i< count_ip;i++)
 	{
-		printf("%d\n",a[i][0]);
+		printf("%d\n",stor_ip_bit[i][0]);
 	}
 #endif
-	num_same = num_of_the_same(a);	
+	num_same = num_of_the_same();	
 	//printf("num_same:%d\n",num_same);
 
 	
@@ -147,13 +163,12 @@ int verify(int a[count_ip][5])
 }
 #endif
 
-int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[])
+int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[count_ip])
 {
 
 	//printf("bit22:%d\n",get_bit_of_ip(src_ip[0],22));
 #if 1
 	int num_flag = 0,max_same_time = 0;
-	int stor_ip_bit[32][5]= {{0}};//stor one colum bit of each ip
 	if(count_ip <5&&count_ip > 2)
 	{
 		num_flag = 2;
@@ -193,33 +208,34 @@ int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[])
 #endif
 	switch(num_flag)
 	{
+		printf("num_flag:%d\n",num_flag);
 		case 2:
-			get_one_colum_all_ip(src_ip,stor_ip_bit,0);
-			get_one_colum_all_ip(src_ip,stor_ip_bit,1);
-			while(verify(stor_ip_bit) != 0)
+			get_one_colum_all_ip(src_ip,0);
+			get_one_colum_all_ip(src_ip,1);
+			while(verify() != 0)
 			{
 				printf("2 colum error reget again\n");
-				get_one_colum_all_ip(src_ip,stor_ip_bit,1);
+				get_one_colum_all_ip(src_ip,1);
 			}
 			break;
 		case 3:
-			get_one_colum_all_ip(src_ip,stor_ip_bit,0);
-			get_one_colum_all_ip(src_ip,stor_ip_bit,1);
-			while(verify(stor_ip_bit) > 2)
+			get_one_colum_all_ip(src_ip,0);
+			get_one_colum_all_ip(src_ip,1);
+			while(verify() > 2)
 			{
 				printf("2 colum error reget again\n");
-				get_one_colum_all_ip(src_ip,stor_ip_bit,1);
+				get_one_colum_all_ip(src_ip,1);
 			}
-			get_one_colum_all_ip(src_ip,stor_ip_bit,2);
+			get_one_colum_all_ip(src_ip,2);
 			while(verify(stor_ip_bit)!=0)
 			{
-				get_one_colum_all_ip(src_ip,stor_ip_bit,2);
+				get_one_colum_all_ip(src_ip,2);
 			}
 			printf("verify:%d\n",verify(stor_ip_bit));
 			int i = 0,j = 0;
 			for(i = 0;i<5;i++)
 			{
-				for(j = 1;j<4;j++)
+				for(j = 0;j<5;j++)
 				{
 					printf("%d ",stor_ip_bit[i][j]);
 				}
