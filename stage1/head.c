@@ -110,16 +110,13 @@ int repeat_get_one_colum_all_ip(struct m_ip src_ip[],int get_bit_time,int execpt
 	{
 		j = 0;
 	}
-	if(j == execpt)
-	{
-		j = j+1;
-	}
+
+	j = execpt + 1;
 	for(i = 0;i<count_ip;i++)
 	{
 		stor_ip_bit[i][get_bit_time+1] = get_bit_of_ip(src_ip[i],j);
 
 		//printf("i:%d get_bit_time+1:%d value:%d\n",i,get_bit_time+1,get_bit_of_ip(src_ip[i],j));
-		
 		printf("ip%d bit%d %d ",i,j,get_bit_of_ip(src_ip[i],j));
 	}
 	printf("\n");
@@ -221,6 +218,8 @@ int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[count_ip])
 	//printf("bit22:%d\n",get_bit_of_ip(src_ip[0],22));
 #if 1
 	int num_flag = 0,max_same_time = 0,index0 = 0,index1 = 0,index2 = 0,index3 = 0,index4 = 0;
+			int index1_time = 0,index2_time = 0,index3_time = 0,index4_time = 0;
+	static int case5_time = 0;
 	if(count_ip <5&&count_ip > 2)
 	{
 		num_flag = 2;
@@ -275,29 +274,45 @@ int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[count_ip])
 			}
 			break;
 		case 3:
+		    c3_label0:
 			index0 = get_one_colum_all_ip(src_ip,0);
 			while(verify() > 4)
 			{
 				index0 = get_one_colum_all_ip(src_ip,0);	
 			}
-			printf("3-0 get ok\n");
+		    c3_label1:
 			index1 = get_one_colum_all_ip(src_ip,1);
-			printf("3-1:verify:%d\n",verify());
-			
-#if 1
 			while(verify() > 2)
 			{
+				index1_time++;
 				printf("2 colum error reget again\n");
 				index1 = get_one_colum_all_ip(src_ip,1);
+				if(index1_time > 32)
+				{
+					repeat_get_one_colum_all_ip(src_ip,0,index0);
+				}
 			}
-			printf("3-1get ok\n");
+		    c3_label2:
 			index2 = get_one_colum_all_ip(src_ip,2);
 			while(verify() > 1)
 			{
+				index2_time++;
 				printf("3 colum error reget again\n");
 				index2 = get_one_colum_all_ip(src_ip,2);
+				if(index2_time > 32 && index2_time < 64)
+				{
+					clear_colum_of_stor_ip_array(3);
+					repeat_get_one_colum_all_ip(src_ip,1,index1);
+					goto c3_label2;
+				}
+				if(index2_time > 64)
+				{
+					clear_colum_of_stor_ip_array(2);
+					clear_colum_of_stor_ip_array(3);
+					repeat_get_one_colum_all_ip(src_ip,0,index0);
+					goto c3_label1;
+				}
 			}
-			printf("3-2:verify:%d\n",verify(stor_ip_bit));
 #if 0
 			int i = 0,j = 0;
 			for(i = 0;i<5;i++)
@@ -310,178 +325,213 @@ int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[count_ip])
 			}
 #endif
 			break;
-#endif
 		case 4:
+		   c4_label0:
 			index0 = get_one_colum_all_ip(src_ip,0);
 			while(verify() > 8)
 			{
-				index0 = get_one_colum_all_ip(src_ip,0);	
+				index0 = get_one_colum_all_ip(src_ip,0);				
 			}
 			printf("4-0 get ok\n");
-			
+		   c4_label1:	
 			index1 = get_one_colum_all_ip(src_ip,1);
 			while(verify() > 4)
 			{
+				index1_time++;
 				index1 = get_one_colum_all_ip(src_ip,1);
+				if(index1_time > 32)
+				{
+					clear_colum_of_stor_ip_array(1);
+					clear_colum_of_stor_ip_array(2);
+					index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
+					while(verify() > 8)
+					{
+						index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);				
+					}
+					goto c4_label1;
+				}
 			}	
 			printf("4-1 get ok\n");
-
+		   c4_label2:
 			index2 = get_one_colum_all_ip(src_ip,2);
 			while(verify() > 2)
 			{
+				index2_time++;
 				index2 = get_one_colum_all_ip(src_ip,2);
+				if(index2_time > 32)
+				{
+					clear_colum_of_stor_ip_array(2);
+					clear_colum_of_stor_ip_array(3);
+					index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
+					while(verify() > 4)
+					{
+						index1_time++;
+						index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
+						if(index1_time > 32)
+						{
+							clear_colum_of_stor_ip_array(1);
+							clear_colum_of_stor_ip_array(2);
+
+							index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
+							while(verify() > 8)
+							{
+								index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);				
+							}
+							goto c4_label1;
+						}
+					}
+					goto c4_label2;
+				}
+
 			}
 			printf("4-2 get ok\n");
-			
+		   c4_label3:	
 			index3 = get_one_colum_all_ip(src_ip,3);
-			int fir_time = 0;
 			while(verify() > 1)
 			{
-				fir_time ++;
+				index3_time ++;
+				printf("index3_time:%d\n",index3_time);
 				index3 = get_one_colum_all_ip(src_ip,3);
-				if(fir_time > 32)
+				if(index3_time > 32)
 				{
-					printf("first get failed! change the colum 2\n");
-					//printf("this is test clear\n");
+
+					clear_colum_of_stor_ip_array(3);
 					clear_colum_of_stor_ip_array(4);
-					//verify();
-					//printf("this is test clear\n");
+					printf("yeah........\n");
 					index2 = repeat_get_one_colum_all_ip(src_ip,2,index2);
 					while(verify() > 2)
 					{
-						index2 = repeat_get_one_colum_all_ip(src_ip,2,index2);	
-					}
-					printf("change colum 2 ok\n");
-					index3 = get_one_colum_all_ip(src_ip,3);
-					int sec_time = 0;
-					while(verify() > 1)
-					{
-						sec_time ++;
-						index3 = get_one_colum_all_ip(src_ip,3);
-						if(sec_time > 32)
+						index2_time++;
+						index2 = repeat_get_one_colum_all_ip(src_ip,2,index2);
+						if(index2_time > 32)
 						{
-							printf("second get failed change colum 1\n");
+							clear_colum_of_stor_ip_array(2);
 							clear_colum_of_stor_ip_array(3);
-							clear_colum_of_stor_ip_array(4);
 							index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
 							while(verify() > 4)
 							{
+								index1_time ++;
 								index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
-							}
-							printf("change colum 1 ok\n");
-							index2 = get_one_colum_all_ip(src_ip,2);
-							while(verify() > 2)
-							{
-								index2 = get_one_colum_all_ip(src_ip,2);
-							}
-							printf("4-2 get ok\n");
-							index3 = get_one_colum_all_ip(src_ip,3);
-							int thr_time = 0;
-							while(verify() > 1)
-							{
-								thr_time ++;
-								index3 = get_one_colum_all_ip(src_ip,3);
-								if(thr_time > 32)
+								if(index1_time > 32)
 								{
-									printf("thrid get failed change colum 0\n");
+									clear_colum_of_stor_ip_array(1);
 									clear_colum_of_stor_ip_array(2);
-									clear_colum_of_stor_ip_array(3);
-									clear_colum_of_stor_ip_array(4);
 
 									index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
 									while(verify() > 8)
 									{
-										index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
+										index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);				
 									}
-									index1 = get_one_colum_all_ip(src_ip,1);
-									while(verify() > 4)
-									{
-										index1 = get_one_colum_all_ip(src_ip,1);
-									}	
-									printf("4-1 get ok\n");
-
-									index2 = get_one_colum_all_ip(src_ip,2);
-									while(verify() > 2)
-									{
-										index2 = get_one_colum_all_ip(src_ip,2);
-									}
-									printf("4-2 get ok\n");
-			
-									index3 = get_one_colum_all_ip(src_ip,3);
-									while(verify() > 1)
-									{
-										index3 = get_one_colum_all_ip(src_ip,3);
-									}
-									printf("4-3 get ok\n");
-									break;
-									
+									goto c4_label1;
+									index3_time = 0;
+									index1_time  = 0;
+									index2_time  = 0;
 								}
 							}
-							printf("4-3 get ok\n");
-							break;
+							goto c4_label2;
+							index3_time = 0;
+							index2_time  = 0;
+							
+							
 						}
+
+							
 					}
-					printf("4-3 get ok\n");
-					break;
+					goto c4_label3;
+					index3_time = 0;
 				}
+
 			}
-
-			printf("4-3 get ok\n");
-
 			break;
 
 		case 5:
-	           label0:
+	           c5_label0:
 			index0 = get_one_colum_all_ip(src_ip,0);
 			while(verify() > 16)
 			{
 				index0 = get_one_colum_all_ip(src_ip,0);
 			}
-		   label1:
+		   c5_label1:
 			index1 = get_one_colum_all_ip(src_ip,1);
 			while(verify() > 8)
 			{
+				index1_time++;
 				index1 = get_one_colum_all_ip(src_ip,1);
+				if(index1_time > 32)
+				{
+					clear_colum_of_stor_ip_array(1);
+					clear_colum_of_stor_ip_array(2);
+					index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
+					while(verify() > 16)
+					{
+						index0 = repeat_get_one_colum_all_ip(src_ip,0,index0);
+					}
+				}
+				goto c5_label1;
 			}
-		   label2:
+		   c5_label2:
 			index2 = get_one_colum_all_ip(src_ip,2);
 			while(verify() > 4)
 			{
-				index1 = get_one_colum_all_ip(src_ip,2);
+				index2_time ++;
+				index2 = get_one_colum_all_ip(src_ip,2);
+				if(index2_time > 32)
+				{
+					clear_colum_of_stor_ip_array(2);
+					clear_colum_of_stor_ip_array(3);
+					index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
+					while(verify() > 4)
+					{
+						index1 = repeat_get_one_colum_all_ip(src_ip,1,index1);
+					}
+					goto c5_label2;
+				}
 			}
-		   label3:
+		   c5_label3:
 			index3 = get_one_colum_all_ip(src_ip,3);
 			while(verify() > 2)
 			{
-				index1 = get_one_colum_all_ip(src_ip,3);
-			}
-		   label4:
-			index4 = get_one_colum_all_ip(src_ip,4);
-			
-			int fir_time = 0;
-			while(verify() > 1)
-			{
-				fir_time ++;
-				index4 = get_one_colum_all_ip(src_ip,4);
-				if(fir_time > 32)
+				index3_time ++;
+				index3 = get_one_colum_all_ip(src_ip,3);
+				if(index3_time > 32)
 				{
-					clear_colum_of_stor_ip_array(5);		
+					clear_colum_of_stor_ip_array(3);
+					clear_colum_of_stor_ip_array(4);
+					index2 = repeat_get_one_colum_all_ip(src_ip,2,index2);
+					while(verify() > 2)
+					{
+						index2 = repeat_get_one_colum_all_ip(src_ip,2,index2);
+					}
+					goto c5_label3;
 
-					repeat_get_one_colum_all_ip(src_ip,3);
-					goto label4;
 				}
 			}
-
+		   c5_label4:
+			index4 = get_one_colum_all_ip(src_ip,4);
+			
+			while(verify() > 1)
+			{
+				index4_time ++;
+				index4 = get_one_colum_all_ip(src_ip,4);
+				if(index4_time > 32)
+				{
+					clear_colum_of_stor_ip_array(4);
+					clear_colum_of_stor_ip_array(5);
+					index3 = repeat_get_one_colum_all_ip(src_ip,3,index3);
+					while(verify() > 1)
+					{
+						index3 = repeat_get_one_colum_all_ip(src_ip,3,index3);
+					}
+					goto c5_label4;
+				}
+			}
 			break;
-		default:
-			break;
-	}
+	default:
+		break;
 
+		}
 
 #endif		
-	
-
-
 
 }
 
