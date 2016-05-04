@@ -21,7 +21,7 @@ int main(int argc,char **argv)
 
 	printf("write_data_len:%d\n",write_data_len);
 
-	if((fpd = fopen("10.pcap","r+"))==NULL)
+	if((fpd = fopen("10.pcap","r"))==NULL)
 	{
 		printf("open 10.pcap file failure\n");
 		exit(0);
@@ -31,7 +31,7 @@ int main(int argc,char **argv)
 		printf("open output.txt file failure\n");
 		exit(0);
 	}
-	if((fpp = fopen("mod10.pcap","a"))==NULL)
+	if((fpp = fopen("mod10.pcap","w+"))==NULL)
 	{
 		printf("open mod10.pcap file failure\n");
 		exit(0);
@@ -57,9 +57,9 @@ int main(int argc,char **argv)
 	fseek(fpd,0,SEEK_SET);
 	printf("sizeof(pcap_header):%d\n",sizeof(struct pcap_header));
 	fread(file_header,1,sizeof(struct pcap_header),fpd);
-	file_header->snaplen += src_len * 10; 
+	file_header->snaplen -= (1452-538-800) * 10; 
 	src_cur_point += sizeof(struct pcap_header);
-	(struct pcap_header *)file_header->
+	
 	fwrite(file_header,1,sizeof(struct pcap_header),fpp);
 	dst_cur_point += sizeof(struct pcap_header);
 	
@@ -89,9 +89,11 @@ int main(int argc,char **argv)
 	printf("after read packet_header.src_cur_point:%d\n",src_cur_point);
 
 	//write pkt_header data
+	printf("--->dst_point:%d\n",dst_cur_point);
 	fseek(fpp,dst_cur_point,SEEK_SET);	
 	fwrite(packet_header,1,sizeof(struct pkt_header),fpp);
 	dst_cur_point +=sizeof(struct pkt_header);
+	printf("--->dst_point:%d\n",dst_cur_point);
 
 
     	//read eth header data
@@ -186,6 +188,21 @@ int main(int argc,char **argv)
 	printf("****************end packet header data*********************/\n\n");
 		
 	}
+#if 0
+	printf("*****************dst pcap file header*************************/\n");
+	fseek(fpp,0,SEEK_SET);
+
+	fread(file_header,1,sizeof(struct pcap_header),fpp);
+	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
+
+	file_header->snaplen =;
+	fwrite(file_header,1,sizeof(struct pcap_header),fpp);
+	dst_cur_point += sizeof(struct pcap_header);
+	
+	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
+
+	printf("*****************end pcap file header**************************/\n\n");
+#endif
 
 	fclose(fpp);
 	fclose(fpd);
