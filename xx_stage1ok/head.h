@@ -32,33 +32,39 @@ struct aes_encry
 #pragma pack(1)
 struct encrypt_ip
 {
-	unsigned char session_num[4];
-	unsigned char len:5;
-	struct path_index pi;
-	struct path_as    pas[0];	
+	unsigned int session_num;
+	unsigned char len;
+	unsigned char index[0];
+	unsigned short index_value[0];	
 	struct aes_encry aes[0];
 };
 #pragma pack()
 
-extern int count_ip;
-extern int stor_ip_bit[32][6];
 
-int get_count_ip(FILE *fp);
-void split_str(char *buf,struct m_ip stemp[]);
-int get_bit_of_ip(struct m_ip bit_temp,int num_bit);
-int get_flag_bit(struct m_ip src_ip[],int stor_flag_bit[]);
-#if 0
-//void dectobin(int num)
-int is_zero(int a,int b);
-int bit(struct m_ip bit_temp,int ip_nbit);
-int is_valid(struct m_ip is_temp[num_ip],int ip_nbit);
+/***************************************************/
+#define MAX_IP_NUM        100
+#define MAX_BIT_NUM       32
 
-unsigned int get_fir_colum(struct m_ip bit_temp[num_ip],int colum,short int a[num_ip][4]);
-unsigned int get_sec_colum(struct m_ip bit_temp[num_ip],int colum,short int a[num_ip][4],int fir_colum);
-unsigned int get_thir_colum(struct m_ip bit_temp[num_ip],int colum,short int a[num_ip][4],int fir_sec_colum);
-struct encrypt_ip stor_index_as(struct encrypt_ip ecy_ip,int fir,int sec,int thir,short int a[num_ip][4]);
-void check_right(struct m_ip is_temp[num_ip],int a,int b,int c);
-#endif
+#define getbit(addr, n) ((addr & mask[n]) == mask[n])
+#define lor(val1, val2) ((val1 << 1) | val2)
 
+typedef unsigned int      u32_t;
+typedef u32_t             ip_t;
+
+ip_t mask[MAX_BIT_NUM] = {
+  0x00000001, 0x00000002, 0x00000004, 0x00000008,
+  0x00000010, 0x00000020, 0x00000040, 0x00000080,
+  0x00000100, 0x00000200, 0x00000400, 0x00000800,
+  0x00001000, 0x00002000, 0x00004000, 0x00008000,
+  0x00010000, 0x00020000, 0x00040000, 0x00080000,
+  0x00100000, 0x00200000, 0x00400000, 0x00800000,
+  0x01000000, 0x02000000, 0x04000000, 0x08000000,
+  0x10000000, 0x20000000, 0x40000000, 0x80000000
+};
+
+extern int get_index(ip_t tbl[], int n, u32_t indx[], u32_t value[]);
+int not_same(u32_t value, u32_t tbl[], int n);
+
+/*******************************************************/
 
 #endif/*_HEAD_H*/

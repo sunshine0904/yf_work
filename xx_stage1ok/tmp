@@ -1,0 +1,502 @@
+i = 1: not_same() = 0
+Index: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ 0: value[0] = 1	value[1] = 0	
+found
+i = 2: value[2] = lor(0, getbit(3233939201, 0))
+value[2] = 1
+not_same() = 0
+Index: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 2	value[1] = 1	value[2] = 2	
+ 2: value[0] = 2	value[1] = 0	value[2] = 2	
+ 3: value[0] = 2	value[1] = 0	value[2] = 2	
+ 4: value[0] = 2	value[1] = 0	value[2] = 2	
+ 5: value[0] = 2	value[1] = 0	value[2] = 2	
+ 6: value[0] = 2	value[1] = 0	value[2] = 2	
+ 7: value[0] = 2	value[1] = 0	value[2] = 2	
+ 8: value[0] = 3	value[1] = 1	value[2] = 3	
+ 9: value[0] = 3	value[1] = 0	value[2] = 3	
+10: value[0] = 3	value[1] = 1	value[2] = 3	
+11: value[0] = 3	value[1] = 0	value[2] = 3	
+12: value[0] = 3	value[1] = 1	value[2] = 3	
+13: value[0] = 3	value[1] = 1	value[2] = 3	
+14: value[0] = 3	value[1] = 1	value[2] = 3	
+15: value[0] = 3	value[1] = 1	value[2] = 3	
+16: value[0] = 2	value[1] = 0	value[2] = 3	
+found
+i = 3: value[3] = lor(0, getbit(3249078018, 0))
+value[3] = 0
+value[3] = lor(0, getbit(3249078018, 16))
+value[3] = 0
+not_same() = 0
+Index: 0 16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 2 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 4	value[1] = 1	value[2] = 6	value[3] = 1	
+ 2: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 3: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 4: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 5: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 6: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 7: value[0] = 4	value[1] = 0	value[2] = 6	value[3] = 0	
+ 8: value[0] = 5	value[1] = 1	value[2] = 7	value[3] = 1	
+ 9: value[0] = 5	value[1] = 0	value[2] = 7	value[3] = 1	
+found
+i = 4: value[4] = lor(0, getbit(3232366337, 0))
+value[4] = 1
+value[4] = lor(1, getbit(3232366337, 16))
+value[4] = 3
+value[4] = lor(3, getbit(3232366337, 9))
+value[4] = 7
+not_same() = 0
+Index: 0 16 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 5 0 7 1 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 10	value[1] = 1	value[2] = 14	value[3] = 3	value[4] = 14	
+ 2: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 3: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 4: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 5: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 6: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 7: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+ 8: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+10: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+11: value[0] = 11	value[1] = 0	value[2] = 15	value[3] = 3	value[4] = 15	
+12: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+13: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+14: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+15: value[0] = 11	value[1] = 1	value[2] = 15	value[3] = 3	value[4] = 15	
+17: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+18: value[0] = 10	value[1] = 0	value[2] = 14	value[3] = 2	value[4] = 14	
+19: value[0] = 11	value[1] = 1	value[2] = 14	value[3] = 3	value[4] = 15	
+found
+i = 5: value[5] = lor(0, getbit(3232295170, 0))
+value[5] = 0
+value[5] = lor(0, getbit(3232295170, 16))
+value[5] = 0
+value[5] = lor(0, getbit(3232295170, 9))
+value[5] = 0
+value[5] = lor(0, getbit(3232295170, 19))
+value[5] = 1
+not_same() = 0
+Index: 0 16 9 19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 11 1 14 3 15 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 22	value[1] = 3	value[2] = 28	value[3] = 7	value[4] = 30	value[5] = 3	
+ 2: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 3: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 4: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 5: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 6: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 7: value[0] = 22	value[1] = 2	value[2] = 28	value[3] = 6	value[4] = 30	value[5] = 2	
+ 8: value[0] = 23	value[1] = 3	value[2] = 29	value[3] = 7	value[4] = 31	value[5] = 3	
+10: value[0] = 23	value[1] = 3	value[2] = 29	value[3] = 7	value[4] = 31	value[5] = 2	
+found
+i = 6: value[6] = lor(0, getbit(3232235265, 0))
+value[6] = 1
+value[6] = lor(1, getbit(3232235265, 16))
+value[6] = 3
+value[6] = lor(3, getbit(3232235265, 9))
+value[6] = 7
+value[6] = lor(7, getbit(3232235265, 19))
+value[6] = 14
+value[6] = lor(14, getbit(3232235265, 10))
+value[6] = 29
+not_same() = 0
+Index: 0 16 9 19 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 23 3 29 7 31 2 29 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 46	value[1] = 7	value[2] = 58	value[3] = 15	value[4] = 62	value[5] = 5	value[6] = 58	
+ 2: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 3: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 4: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 5: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 6: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 7: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 58	
+ 8: value[0] = 47	value[1] = 7	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 5	value[6] = 59	
+11: value[0] = 47	value[1] = 6	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 5	value[6] = 59	
+12: value[0] = 47	value[1] = 7	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 4	value[6] = 59	
+13: value[0] = 47	value[1] = 7	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 5	value[6] = 59	
+14: value[0] = 47	value[1] = 7	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 5	value[6] = 59	
+15: value[0] = 47	value[1] = 7	value[2] = 59	value[3] = 15	value[4] = 63	value[5] = 5	value[6] = 59	
+17: value[0] = 46	value[1] = 6	value[2] = 58	value[3] = 14	value[4] = 62	value[5] = 4	value[6] = 59	
+found
+i = 7: value[7] = lor(0, getbit(3215523586, 0))
+value[7] = 0
+value[7] = lor(0, getbit(3215523586, 16))
+value[7] = 0
+value[7] = lor(0, getbit(3215523586, 9))
+value[7] = 1
+value[7] = lor(1, getbit(3215523586, 19))
+value[7] = 3
+value[7] = lor(3, getbit(3215523586, 10))
+value[7] = 7
+value[7] = lor(7, getbit(3215523586, 17))
+value[7] = 14
+not_same() = 0
+Index: 0 16 9 19 10 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 46 6 58 14 62 4 59 14 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 
+ 1: value[0] = 92	value[1] = 13	value[2] = 116	value[3] = 29	value[4] = 124	value[5] = 9	value[6] = 118	value[7] = 29	
+ 2: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 3: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 4: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 5: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 6: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 7: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+ 8: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+11: value[0] = 93	value[1] = 12	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+12: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 8	value[6] = 119	value[7] = 29	
+13: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+14: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+15: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+18: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 119	value[7] = 28	
+20: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+21: value[0] = 93	value[1] = 13	value[2] = 116	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+22: value[0] = 92	value[1] = 12	value[2] = 117	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 28	
+23: value[0] = 93	value[1] = 13	value[2] = 117	value[3] = 29	value[4] = 125	value[5] = 9	value[6] = 119	value[7] = 29	
+24: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 29	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 29	
+25: value[0] = 92	value[1] = 12	value[2] = 116	value[3] = 28	value[4] = 124	value[5] = 8	value[6] = 118	value[7] = 29	
+found
+i = 8: value[8] = lor(0, getbit(3232275209, 0))
+value[8] = 1
+value[8] = lor(1, getbit(3232275209, 16))
+value[8] = 2
+value[8] = lor(2, getbit(3232275209, 9))
+value[8] = 5
+value[8] = lor(5, getbit(3232275209, 19))
+value[8] = 11
+value[8] = lor(11, getbit(3232275209, 10))
+value[8] = 22
+value[8] = lor(22, getbit(3232275209, 17))
+value[8] = 44
+value[8] = lor(44, getbit(3232275209, 25))
+value[8] = 88
+not_same() = 1
+i = 9: value[9] = lor(0, getbit(3065184003, 0))
+value[9] = 1
+value[9] = lor(1, getbit(3065184003, 16))
+value[9] = 2
+value[9] = lor(2, getbit(3065184003, 9))
+value[9] = 5
+value[9] = lor(5, getbit(3065184003, 19))
+value[9] = 10
+value[9] = lor(10, getbit(3065184003, 10))
+value[9] = 21
+value[9] = lor(21, getbit(3065184003, 17))
+value[9] = 43
+value[9] = lor(43, getbit(3065184003, 25))
+value[9] = 87
+not_same() = 1
+i = 10: value[10] = lor(0, getbit(3065181444, 0))
+value[10] = 0
+value[10] = lor(0, getbit(3065181444, 16))
+value[10] = 0
+value[10] = lor(0, getbit(3065181444, 9))
+value[10] = 0
+value[10] = lor(0, getbit(3065181444, 19))
+value[10] = 0
+value[10] = lor(0, getbit(3065181444, 10))
+value[10] = 1
+value[10] = lor(1, getbit(3065181444, 17))
+value[10] = 3
+value[10] = lor(3, getbit(3065181444, 25))
+value[10] = 7
+not_same() = 1
+i = 11: value[11] = lor(0, getbit(3065511685, 0))
+value[11] = 1
+value[11] = lor(1, getbit(3065511685, 16))
+value[11] = 3
+value[11] = lor(3, getbit(3065511685, 9))
+value[11] = 7
+value[11] = lor(7, getbit(3065511685, 19))
+value[11] = 14
+value[11] = lor(14, getbit(3065511685, 10))
+value[11] = 29
+value[11] = lor(29, getbit(3065511685, 17))
+value[11] = 59
+value[11] = lor(59, getbit(3065511685, 25))
+value[11] = 119
+not_same() = 1
+i = 12: value[12] = lor(0, getbit(3081961294, 0))
+value[12] = 0
+value[12] = lor(0, getbit(3081961294, 16))
+value[12] = 0
+value[12] = lor(0, getbit(3081961294, 9))
+value[12] = 1
+value[12] = lor(1, getbit(3081961294, 19))
+value[12] = 2
+value[12] = lor(2, getbit(3081961294, 10))
+value[12] = 5
+value[12] = lor(5, getbit(3081961294, 17))
+value[12] = 11
+value[12] = lor(11, getbit(3081961294, 25))
+value[12] = 23
+not_same() = 1
+i = 13: value[13] = lor(0, getbit(3065249539, 0))
+value[13] = 1
+value[13] = lor(1, getbit(3065249539, 16))
+value[13] = 3
+value[13] = lor(3, getbit(3065249539, 9))
+value[13] = 7
+value[13] = lor(7, getbit(3065249539, 19))
+value[13] = 14
+value[13] = lor(14, getbit(3065249539, 10))
+value[13] = 29
+value[13] = lor(29, getbit(3065249539, 17))
+value[13] = 59
+value[13] = lor(59, getbit(3065249539, 25))
+value[13] = 119
+not_same() = 0
+Index: 0 16 9 19 10 17 25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 92 12 116 28 124 8 118 29 88 87 7 119 23 119 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Mark: 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 1 0 0 0 0 0 1 0 0 0 0 0 0 
+ 1: value[0] = 184	value[1] = 25	value[2] = 232	value[3] = 57	value[4] = 248	value[5] = 17	value[6] = 236	value[7] = 59	value[8] = 176	value[9] = 175	value[10] = 14	value[11] = 238	value[12] = 47	value[13] = 239	
+found
+i = 14: value[14] = lor(0, getbit(3065178372, 0))
+value[14] = 0
+value[14] = lor(0, getbit(3065178372, 16))
+value[14] = 0
+value[14] = lor(0, getbit(3065178372, 9))
+value[14] = 0
+value[14] = lor(0, getbit(3065178372, 19))
+value[14] = 0
+value[14] = lor(0, getbit(3065178372, 10))
+value[14] = 0
+value[14] = lor(0, getbit(3065178372, 17))
+value[14] = 1
+value[14] = lor(1, getbit(3065178372, 25))
+value[14] = 3
+value[14] = lor(3, getbit(3065178372, 1))
+value[14] = 6
+not_same() = 1
+i = 15: value[15] = lor(0, getbit(3065118469, 0))
+value[15] = 1
+value[15] = lor(1, getbit(3065118469, 16))
+value[15] = 3
+value[15] = lor(3, getbit(3065118469, 9))
+value[15] = 7
+value[15] = lor(7, getbit(3065118469, 19))
+value[15] = 14
+value[15] = lor(14, getbit(3065118469, 10))
+value[15] = 29
+value[15] = lor(29, getbit(3065118469, 17))
+value[15] = 58
+value[15] = lor(58, getbit(3065118469, 25))
+value[15] = 117
+value[15] = lor(117, getbit(3065118469, 1))
+value[15] = 234
+not_same() = 1
+i = 16: value[16] = lor(0, getbit(3048406862, 0))
+value[16] = 0
+value[16] = lor(0, getbit(3048406862, 16))
+value[16] = 0
+value[16] = lor(0, getbit(3048406862, 9))
+value[16] = 1
+value[16] = lor(1, getbit(3048406862, 19))
+value[16] = 2
+value[16] = lor(2, getbit(3048406862, 10))
+value[16] = 5
+value[16] = lor(5, getbit(3048406862, 17))
+value[16] = 11
+value[16] = lor(11, getbit(3048406862, 25))
+value[16] = 22
+value[16] = lor(22, getbit(3048406862, 1))
+value[16] = 45
+not_same() = 1
+i = 17: value[17] = lor(0, getbit(3065158410, 0))
+value[17] = 0
+value[17] = lor(0, getbit(3065158410, 16))
+value[17] = 0
+value[17] = lor(0, getbit(3065158410, 9))
+value[17] = 1
+value[17] = lor(1, getbit(3065158410, 19))
+value[17] = 2
+value[17] = lor(2, getbit(3065158410, 10))
+value[17] = 4
+value[17] = lor(4, getbit(3065158410, 17))
+value[17] = 9
+value[17] = lor(9, getbit(3065158410, 25))
+value[17] = 19
+value[17] = lor(19, getbit(3065158410, 1))
+value[17] = 39
+not_same() = 1
+i = 18: value[18] = lor(0, getbit(2898041605, 0))
+value[18] = 1
+value[18] = lor(1, getbit(2898041605, 16))
+value[18] = 2
+value[18] = lor(2, getbit(2898041605, 9))
+value[18] = 5
+value[18] = lor(5, getbit(2898041605, 19))
+value[18] = 11
+value[18] = lor(11, getbit(2898041605, 10))
+value[18] = 22
+value[18] = lor(22, getbit(2898041605, 17))
+value[18] = 44
+value[18] = lor(44, getbit(2898041605, 25))
+value[18] = 88
+value[18] = lor(88, getbit(2898041605, 1))
+value[18] = 176
+not_same() = 0
+Index: 0 16 9 19 10 17 25 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Value: 184 25 232 57 248 17 236 59 176 175 14 238 47 239 6 234 45 39 176 0 0 0 0 0 0 0 0 
+Mark: 1 1 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 1 0 0 0 0 0 1 0 0 0 0 0 0 
+ 2: value[0] = 368	value[1] = 50	value[2] = 464	value[3] = 114	value[4] = 496	value[5] = 34	value[6] = 472	value[7] = 118	value[8] = 352	value[9] = 350	value[10] = 29	value[11] = 477	value[12] = 95	value[13] = 478	value[14] = 13	value[15] = 469	value[16] = 91	value[17] = 78	value[18] = 353	
+found
+i = 19: value[19] = lor(0, getbit(2898039046, 0))
+value[19] = 0
+value[19] = lor(0, getbit(2898039046, 16))
+value[19] = 0
+value[19] = lor(0, getbit(2898039046, 9))
+value[19] = 0
+value[19] = lor(0, getbit(2898039046, 19))
+value[19] = 1
+value[19] = lor(1, getbit(2898039046, 10))
+value[19] = 2
+value[19] = lor(2, getbit(2898039046, 17))
+value[19] = 4
+value[19] = lor(4, getbit(2898039046, 25))
+value[19] = 8
+value[19] = lor(8, getbit(2898039046, 1))
+value[19] = 17
+value[19] = lor(17, getbit(2898039046, 2))
+value[19] = 35
+not_same() = 1
+i = 20: value[20] = lor(0, getbit(2897713927, 0))
+value[20] = 1
+value[20] = lor(1, getbit(2897713927, 16))
+value[20] = 3
+value[20] = lor(3, getbit(2897713927, 9))
+value[20] = 7
+value[20] = lor(7, getbit(2897713927, 19))
+value[20] = 14
+value[20] = lor(14, getbit(2897713927, 10))
+value[20] = 28
+value[20] = lor(28, getbit(2897713927, 17))
+value[20] = 57
+value[20] = lor(57, getbit(2897713927, 25))
+value[20] = 114
+value[20] = lor(114, getbit(2897713927, 1))
+value[20] = 229
+value[20] = lor(229, getbit(2897713927, 2))
+value[20] = 459
+not_same() = 1
+i = 21: value[21] = lor(0, getbit(2914818824, 0))
+value[21] = 0
+value[21] = lor(0, getbit(2914818824, 16))
+value[21] = 0
+value[21] = lor(0, getbit(2914818824, 9))
+value[21] = 1
+value[21] = lor(1, getbit(2914818824, 19))
+value[21] = 3
+value[21] = lor(3, getbit(2914818824, 10))
+value[21] = 6
+value[21] = lor(6, getbit(2914818824, 17))
+value[21] = 12
+value[21] = lor(12, getbit(2914818824, 25))
+value[21] = 24
+value[21] = lor(24, getbit(2914818824, 1))
+value[21] = 48
+value[21] = lor(48, getbit(2914818824, 2))
+value[21] = 96
+not_same() = 1
+i = 22: value[22] = lor(0, getbit(2898107141, 0))
+value[22] = 1
+value[22] = lor(1, getbit(2898107141, 16))
+value[22] = 3
+value[22] = lor(3, getbit(2898107141, 9))
+value[22] = 7
+value[22] = lor(7, getbit(2898107141, 19))
+value[22] = 15
+value[22] = lor(15, getbit(2898107141, 10))
+value[22] = 30
+value[22] = lor(30, getbit(2898107141, 17))
+value[22] = 60
+value[22] = lor(60, getbit(2898107141, 25))
+value[22] = 120
+value[22] = lor(120, getbit(2898107141, 1))
+value[22] = 240
+value[22] = lor(240, getbit(2898107141, 2))
+value[22] = 481
+not_same() = 1
+i = 23: value[23] = lor(0, getbit(2898035974, 0))
+value[23] = 0
+value[23] = lor(0, getbit(2898035974, 16))
+value[23] = 0
+value[23] = lor(0, getbit(2898035974, 9))
+value[23] = 0
+value[23] = lor(0, getbit(2898035974, 19))
+value[23] = 1
+value[23] = lor(1, getbit(2898035974, 10))
+value[23] = 3
+value[23] = lor(3, getbit(2898035974, 17))
+value[23] = 6
+value[23] = lor(6, getbit(2898035974, 25))
+value[23] = 12
+value[23] = lor(12, getbit(2898035974, 1))
+value[23] = 25
+value[23] = lor(25, getbit(2898035974, 2))
+value[23] = 51
+not_same() = 1
+i = 24: value[24] = lor(0, getbit(2897976071, 0))
+value[24] = 1
+value[24] = lor(1, getbit(2897976071, 16))
+value[24] = 3
+value[24] = lor(3, getbit(2897976071, 9))
+value[24] = 7
+value[24] = lor(7, getbit(2897976071, 19))
+value[24] = 15
+value[24] = lor(15, getbit(2897976071, 10))
+value[24] = 30
+value[24] = lor(30, getbit(2897976071, 17))
+value[24] = 61
+value[24] = lor(61, getbit(2897976071, 25))
+value[24] = 122
+value[24] = lor(122, getbit(2897976071, 1))
+value[24] = 245
+value[24] = lor(245, getbit(2897976071, 2))
+value[24] = 491
+not_same() = 1
+i = 25: value[25] = lor(0, getbit(2881264392, 0))
+value[25] = 0
+value[25] = lor(0, getbit(2881264392, 16))
+value[25] = 0
+value[25] = lor(0, getbit(2881264392, 9))
+value[25] = 1
+value[25] = lor(1, getbit(2881264392, 19))
+value[25] = 3
+value[25] = lor(3, getbit(2881264392, 10))
+value[25] = 6
+value[25] = lor(6, getbit(2881264392, 17))
+value[25] = 12
+value[25] = lor(12, getbit(2881264392, 25))
+value[25] = 25
+value[25] = lor(25, getbit(2881264392, 1))
+value[25] = 50
+value[25] = lor(50, getbit(2881264392, 2))
+value[25] = 100
+not_same() = 1
+i = 26: value[26] = lor(0, getbit(2898041611, 0))
+value[26] = 1
+value[26] = lor(1, getbit(2898041611, 16))
+value[26] = 2
+value[26] = lor(2, getbit(2898041611, 9))
+value[26] = 5
+value[26] = lor(5, getbit(2898041611, 19))
+value[26] = 11
+value[26] = lor(11, getbit(2898041611, 10))
+value[26] = 22
+value[26] = lor(22, getbit(2898041611, 17))
+value[26] = 44
+value[26] = lor(44, getbit(2898041611, 25))
+value[26] = 88
+value[26] = lor(88, getbit(2898041611, 1))
+value[26] = 177
+value[26] = lor(177, getbit(2898041611, 2))
+value[26] = 354
+not_same() = 1
+bitnum:9
+stor index and value ok
