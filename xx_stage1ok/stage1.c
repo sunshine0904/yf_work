@@ -156,7 +156,8 @@ int main()
 	{
 		memset(key,0,16);
 		//fill the secret key
-		memcpy(key,iptbl + i,4);
+		unsigned int temp = htonl(*(iptbl + i));
+		memcpy(key,&temp,4);
 
 		#if 1
    		printf ("***************secrte key***********************\n");  
