@@ -102,6 +102,9 @@ int main()
   bitnum = get_index(iptbl, ipnum, indx, value);
  
   printf("bitnum:%d\n",bitnum);
+  
+  unsigned char *buff = malloc(sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + 
+		  		sizeof(u16_t) * bitnum + (ipnum -1) * sizeof(u8_t));
  
 #if 0 
   printf("Result: (");
@@ -156,8 +159,8 @@ int main()
 	{
 		memset(key,0,16);
 		//fill the secret key
-		unsigned int temp = htonl(*(iptbl + i));
-		memcpy(key,&temp,4);
+		unsigned int key_temp = htonl(*(iptbl + i));
+		memcpy(key,&key_temp,4);
 
 		#if 1
    		printf ("***************secrte key***********************\n");  
@@ -172,21 +175,27 @@ int main()
 		AES_ExpandKey(key,expKey);
 
 		//inital the data will be encrypted
+		memset(ip1_ip3[i],0,16);
+		unsigned int data1= 0,data2 = 0;
 		if(i < ipnum -1)
 		{
-			memcpy(ip1_ip3[i],&iptbl[i-1],4);
-			memcpy(ip1_ip3[i]+4,&iptbl[i+1],4);
-			memset(ip1_ip3[i],0,8);
+			data1 = htonl(iptbl[i-1]);
+			data2 = htonl(iptbl[i+1]);
+			memcpy(ip1_ip3[i],&data1,4);
+			memcpy(ip1_ip3[i]+4,&data2,4);
+			//memset(ip1_ip3[i],0,8);
 		}
 		else
 		{
-			memcpy(ip1_ip3[i],&iptbl[i-1],4);
-			memcpy(ip1_ip3[i]+4,&iptbl[0],4);
-			memset(ip1_ip3[i],0,8);
+			data1 = htonl(iptbl[i-1]);
+			data2 = htonl(iptbl[0]);
+			memcpy(ip1_ip3[i],&data1,4);
+			memcpy(ip1_ip3[i]+4,&data2,4);
+			//memset(ip1_ip3[i],0,8);
 		}
 		
 		printf("data need to encrypt\n");
-		printf("%x\n",ip1_ip3[i][0]);
+		//printf("%x\n",ip1_ip3[i][0]);
 	
 		//encrypt the data
 		AES_Encrypt(ip1_ip3[i],expKey,out);
@@ -219,12 +228,18 @@ int main()
 	}
 	/***********************end encrypt ip and fill**********************/
 
+	memcpy(buff,&session_num,sizeof(session_num));
+	memcpy(buff + sizeof(session_num),&len,sizeof(len));
+	memcpy(buff + sizeof(session_num) + sizeof(len),index,bitnum);
+	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,&index_value,bitnum);
+	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
 
 
+	for(i = 0;i<5+bitnum *3+(ipnum - 1)*16;i++)
+	{
+		printf("%#02x ",buff[i]);
+	}
 
-
-
-  
-
+	free(buff);
 	return 0;
 }
