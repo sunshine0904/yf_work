@@ -5,10 +5,6 @@
 #include "struct_head.h"
 #include "aes_lib.h"
 
-struct secret_key
-{
-	unsigned char mkey[16];
-};
 
 int main()
 {
@@ -17,7 +13,15 @@ int main()
 	char *buff = NULL;
 	int cur_point = 0,file_len = 0;
 	int dencrypt_index = 0;
+
+  	//encrypt struct
+  	uint32_t session_num;
+  	unsigned char  len;
+  	//unsigned char  index[bitnum];
+  	//unsigned short index_value[bitnum];
+  	//unsigned char  ip1_ip3[ipnum-1][16] ;
 	
+
 	struct timeval start,end;//test run time
 	gettimeofday(&start,NULL);
 	
@@ -30,33 +34,7 @@ int main()
 	ip3.ip_dec[1] = 192;
 	ip3.ip_dec[2] = 255;
 	ip3.ip_dec[3] = 20;
-#if 0
-	unsigned char ip1[4] = {0xd3,0xc0,0xff,0x14};//prev.txt
-	unsigned char key1[16] = {0x75,0xc0,0xff,0x5,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-	unsigned char ip[4] = {0x75,0xc0,0xff,0x5};
-	struct m_ip ip3;
-	memcpy(ip3.ip_h,ip,4);
-	ip3.ip_dec[0] = 117;
-	ip3.ip_dec[1] = 192;
-	ip3.ip_dec[2] = 255;
-	ip3.ip_dec[3] = 5;
 
-#endif
-
-#if 0	
-		0xc0 0xa8 0xff 0x1 
-		0xd3 0xc0 0xff 0x14 
-		0x75 0xc0 0xff 0x5 
-		0xa9 0xc0 0xff 0xf 
-		0xe6 0xc0 0xff 0x21
-#endif
-#if 0
-	//128 bit secret key
-	unsigned char key[4][16] = {{0xd3,0xc0,0xff,0x14,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-	{0x75,0xc0,0xff,0x5,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}, 
-	{0xa9,0xc0,0xff,0xf,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}, 
-	{0xe6,0xc0,0xff,0x21,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}; 
-#endif	
 	//expand key
     	unsigned char  expKey[4 * Nc * (Nr + 1)];
 	
@@ -84,7 +62,7 @@ int main()
 
 	printf("*****************pcap file header*************************/\n");
 	fseek(fpd,0,SEEK_SET);
-	printf("sizeof(pcap_header):%d\n",sizeof(struct pcap_header));
+	//printf("sizeof(pcap_header):%d\n",sizeof(struct pcap_header));
 	fread(file_header,1,sizeof(struct pcap_header),fpd);
 	cur_point += sizeof(struct pcap_header);
 	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
@@ -103,18 +81,22 @@ int main()
 	printf("*****************packet header data*************************/\n");
 	printf("count:%d\n",count++);
 	fseek(fpd,cur_point,SEEK_SET);	
-	//printf("cur_point:%d\n",cur_point);
-	fread(packet_header,1,sizeof(struct pkt_header),fpd);\
+	printf("1111cur_point:%d\n",cur_point);
+	fread(packet_header,1,sizeof(struct pkt_header),fpd);
 	cur_point += sizeof(struct pkt_header);
+	printf("2222cur_point:%d\n",cur_point);
 	printf("pkt_header:\nsec_time:%#x  usec_time:%#x   caplen:%#x  len:%#x\n",packet_header->sec_time,packet_header->usec_time,packet_header->caplen,packet_header->len);
 
 	//fseek(fpd,cur_point+sizeof(struct pkt_header)+sizeof(struct ether_header)+sizeof(struct ipheader),SEEK_SET);
 	
 	printf("********************eth data****************************/\n");
 	fseek(fpd,cur_point,SEEK_SET);
+	printf("1111cur_point:%d\n",cur_point);
 	fread(eth_data,1,sizeof(struct ether_header),fpd);
 	cur_point += sizeof(struct ether_header);
+	printf("2222cur_point:%d\n",cur_point);
 
+#if 0
 	printf("dst mac :");
 	for(i = 0;i<6;i++)
 	{
@@ -131,22 +113,29 @@ int main()
 
 	printf("eth_type: ");
 	printf("%#.4x \n",eth_data->eth_typ_len[0] << 8 | eth_data->eth_typ_len[1]);
+#endif
 	printf("********************end eth data****************************/\n\n");
 	
 
 	printf("*********************ip data********************\n");	
 	fseek(fpd,cur_point,SEEK_SET);
+	printf("1111cur_point:%d\n",cur_point);
 	fread(ip_data,1,sizeof(struct ipheader),fpd);
 	cur_point += sizeof(struct ipheader);
+	printf("2222cur_point:%d\n",cur_point);
 
+#if 0
 	printf("ipversion and iphdr_len:%#x  ",ip_data->iplv);
 	printf("ip_len:%#x  \n",ip_data->iph_len);
 	
 	printf("it is small endian!  ");
 	printf("ip_srcip:%#x  ",ip_data->iph_sourceip);
 	printf("ip_dstip:%#x  \n",ip_data->iph_destip);
+#endif
 	printf("****************end ip data********************/\n\n");
 
+	int payload_len = ip_data->iph_len;
+	printf("payload_len:%d\n",payload_len);
 #if 0
 	printf("************tcp header data****************/\n");
 	fseek(fpd,cur_point,SEEK_SET);
@@ -161,10 +150,20 @@ int main()
 	printf("*********************aes_struct data********************\n");	
 	fseek(fpd,cur_point,SEEK_SET);
 	//printf("cur_point:%d\n",cur_point);
-	printf("aes_struct read len:%d  ",fread(aes_struct,1,sizeof(struct encrypt_ip),fpd));
-	printf("aes_struct len:%d \n",aes_struct->len);
-	printf("aes_struct:index1:%d index2:%d index3:%d index4:%d index5:%d\n",aes_struct->pi.index1,aes_struct->pi.index2,aes_struct->pi.index3,aes_struct->pi.index4,aes_struct->pi.index5);
-	printf("aes_struct:as1:%d as2:%d as3:%d as4:%d as5:%d\n",aes_struct->pas[0].as,aes_struct->pas[1].as,aes_struct->pas[2].as,aes_struct->pas[3].as,aes_struct->pas[4].as);
+	unsigned char *buff = malloc(payload_len);
+	fread(buff,1,payload_len,fpd);
+	
+	for(i = 0;i<446;i++)
+	{
+		printf("%02x ",buff[i]);
+	}
+	memcpy(&session_num,buff,4);	
+	printf("\nsession_num:%d\n",session_num);
+	memcpy(&len,buff+4,1);
+	printf("len:%d\n",len);
+	
+
+#if 0
 	for(i = 0;i<4;i++)
 	{
 		printf("encrypt_ip%d:\n",i);
@@ -174,33 +173,7 @@ int main()
 		}
 		printf("\n");
 	}
-	
-	printf("bit1:%d bit2:%d bit3:%d \n",bit(ip3,aes_struct->pi.index1),bit(ip3,aes_struct->pi.index2),bit(ip3,aes_struct->pi.index3));	
 
-	int  calc_as = bit(ip3,aes_struct->pi.index1) * 1 + bit(ip3,aes_struct->pi.index2) * 2 + bit(ip3,aes_struct->pi.index3) * 2 * 2;
-	printf("calc_as:%d\n",calc_as);
-	for(j = 0;j < 5;j++)
-	{
-		if(calc_as == aes_struct->pas[j].as)
-		{
-			dencrypt_index = j - 1;
-			break;
-		}
-	}
-	printf("dencrypt_index:%d\n",dencrypt_index);
-
-	//dencrypt the data we need(as index -1)
-	AES_ExpandKey(key1,expKey);
-	AES_Decrypt(aes_struct->aes[dencrypt_index].ip1_ip3_time,expKey,dencrypt);
-	for(j = 0;j<16;j++)
-	{
-		printf("%02x ",dencrypt[j]);
-	}
-	printf("\n");
-
-	//compare with the first prev.txt ip
-	unsigned char compare_ip[4];
-	memcpy(compare_ip,dencrypt,4);
 #if 0
 	for(j = 0;j<4;j++)
 	{
@@ -247,9 +220,10 @@ int main()
 #endif
 	cur_point += sizeof(struct encrypt_ip);
 	printf("*********************end aes_struct data********************\n");
+#endif
 
 	cur_point = cur_point + (packet_header->len - sizeof(struct ether_header) - sizeof(struct ipheader) - sizeof(struct tcphdr));
-	printf("****************end packet header data*********************/\n\n");
+	printf("\n****************end packet header data*********************/\n\n");
 		
 	}
 	

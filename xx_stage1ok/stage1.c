@@ -84,8 +84,8 @@ int main()
   int i = 0,j = 0, ipnum = 27, bitnum = 0;
   
   //encrypt struct
-  u32_t session_num = 12345;
-  u8_t  len = bitnum;
+  u32_t session_num ;
+  u8_t  len;
   u8_t  index[bitnum];
   u16_t index_value[bitnum];
   u8_t  ip1_ip3[ipnum-1][16] ;
@@ -105,7 +105,9 @@ int main()
   
   unsigned char *buff = malloc(sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + 
 		  		sizeof(u16_t) * bitnum + (ipnum -1) * sizeof(u8_t));
- 
+  int buff_len = sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + sizeof(u16_t) * bitnum + (ipnum -1) * 16 * sizeof(u8_t);
+  printf("buff_len:%d\n",buff_len);
+
 #if 0 
   printf("Result: (");
   for (i = 0; i < bitnum; i++) printf("%d ", indx[i]);
@@ -119,6 +121,8 @@ int main()
 #endif
 
 
+  session_num  = 12345;
+  len = bitnum;
   //stor index
   for(i = 0;i<bitnum;i++)
   {
@@ -234,6 +238,15 @@ int main()
 	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,&index_value,bitnum);
 	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
 
+	
+	//open output file
+	FILE *fpd;
+	if((fpd = fopen("output.txt","a+")) == NULL)
+	{
+		printf("open output file failure\n");
+		return 0;
+	}
+	fwrite(buff,1,buff_len,fpd);
 
 	for(i = 0;i<5+bitnum *3+(ipnum - 1)*16;i++)
 	{
@@ -241,5 +254,6 @@ int main()
 	}
 
 	free(buff);
+	fclose(fpd);
 	return 0;
 }

@@ -215,20 +215,6 @@ int main(int argc,char **argv)
 	printf("****************end packet header data*********************/\n\n");
 		
 	}
-#if 1
-	printf("*****************dst pcap file header modify*************************/\n");
-	fseek(fpp,0,SEEK_SET);
-
-	fread(file_header,1,sizeof(struct pcap_header),fpp);
-	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
-
-	file_header->snaplen = dst_cur_point;
-	fwrite(file_header,1,sizeof(struct pcap_header),fpp);
-	
-	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
-
-	printf("*****************end pcap file header modify**************************/\n\n");
-#endif
 
 	fclose(fpp);
 	fclose(fpd);
