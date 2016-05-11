@@ -94,6 +94,7 @@ int main()
   //128 bit secret key
   unsigned char key[16] = {0}; 
   //expand key
+  unsigned char  input[16];
   unsigned char  expKey[4 * Nc * (Nr + 1)]; 
   unsigned char  out[16]; 
   unsigned char  dencrypt[16];
@@ -179,46 +180,56 @@ int main()
 		AES_ExpandKey(key,expKey);
 
 		//inital the data will be encrypted
-		memset(ip1_ip3[i],0,16);
+		memset(input,0,16);
 		unsigned int data1= 0,data2 = 0;
 		if(i < ipnum -1)
 		{
 			data1 = htonl(iptbl[i-1]);
 			data2 = htonl(iptbl[i+1]);
-			memcpy(ip1_ip3[i],&data1,4);
-			memcpy(ip1_ip3[i]+4,&data2,4);
+			memcpy(input,&data1,4);
+			memcpy(input+4,&data2,4);
 			//memset(ip1_ip3[i],0,8);
 		}
 		else
 		{
 			data1 = htonl(iptbl[i-1]);
 			data2 = htonl(iptbl[0]);
-			memcpy(ip1_ip3[i],&data1,4);
-			memcpy(ip1_ip3[i]+4,&data2,4);
+			memcpy(input,&data1,4);
+			memcpy(input+4,&data2,4);
 			//memset(ip1_ip3[i],0,8);
 		}
 		
 		printf("data need to encrypt\n");
 		//printf("%x\n",ip1_ip3[i][0]);
+		
+		#if 1
+		//show the  data be encrypt
+   		printf ("*************input encrypted data**************************\n");  
+		for (idx=0; idx<16; idx++) 
+    		{
+   	    		 printf ("%.02x ",input[idx]);
+    		}
+		printf("\n");
+		#endif
 	
 		//encrypt the data
-		AES_Encrypt(ip1_ip3[i],expKey,out);
+		AES_Encrypt(input,expKey,ip1_ip3[i-1]);
 		//memset(ecy_ip.aes + i-1,0,16);
 
-
+		
 		#if 1
 		//show the encrypt data
    		printf ("*************encrypted data**************************\n");  
 		for (idx=0; idx<16; idx++) 
     		{
-   	    		 printf ("%.2x ",ip1_ip3[i][idx]);
+   	    		 printf ("%.2x ",ip1_ip3[i-1][idx]);
     		}
 		printf("\n");
 		#endif
-
-		AES_Decrypt(out,expKey,dencrypt);
 		
-		#if 1
+		AES_Decrypt(ip1_ip3[i-1],expKey,dencrypt);
+
+#if 1
    		printf ("*************dencrypted data**************************\n");  
 		for (idx=0; idx<16; idx++) 
     		{
@@ -238,6 +249,17 @@ int main()
 	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,&index_value,bitnum);
 	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
 
+		#if 1
+		//show the encrypt data
+   		printf ("*************encrypted data**************************\n");  
+		for(i = 0;i<27;i++){
+		for (idx=0; idx<16; idx++) 
+    		{
+   	    		 printf ("%.2x ",ip1_ip3[i][idx]);
+    		}
+		}
+		printf("\n");
+		#endif
 	
 	//open output file
 	FILE *fpd;
@@ -246,11 +268,12 @@ int main()
 		printf("open output file failure\n");
 		return 0;
 	}
-	fwrite(buff,1,buff_len,fpd);
-
-	for(i = 0;i<5+bitnum *3+(ipnum - 1)*16;i++)
+	printf("fwrite ret:%d\n",fwrite(buff,1,buff_len,fpd));
+	printf("bitnum:%d\n",bitnum);
+	for(i = 0;i<(5+bitnum *3+(ipnum - 1)*16);i++)
 	{
-		printf("%#02x ",buff[i]);
+
+		printf("i:%d %#02x ",i,buff[i]);
 	}
 
 	free(buff);
