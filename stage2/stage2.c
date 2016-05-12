@@ -15,7 +15,7 @@ int main(int argc,char **argv)
 	FILE *fpd,*fps,*fpp;
 	uint32_t i = 0,j = 0,count = 0,src_len = 0,tcphdr_data_len = 0;
 	int write_data_len = atoi(argv[1]);
-	char *ins_buff = NULL,*eth_ip_buff = NULL,*tcphdr_data_buff = NULL;
+	unsigned char *ins_buff = NULL,*eth_ip_buff = NULL,*tcphdr_data_buff = NULL;
 	int src_cur_point = 0,dst_cur_point = 0,file_len = 0;
 	struct pcap_header *file_header = (struct pcap_header *)malloc(sizeof(struct pcap_header));
 	struct pkt_header *packet_header = (struct pkt_header *)malloc(sizeof(struct pkt_header));
@@ -33,7 +33,7 @@ int main(int argc,char **argv)
 		printf("open 10.pcap file failure\n");
 		exit(0);
 	}
-	if((fps = fopen("output.txt","r"))==NULL)
+	if((fps = fopen("../xx_stage1ok/output.txt","r"))==NULL)
 	{
 		printf("open output.txt file failure\n");
 		exit(0);
@@ -55,6 +55,11 @@ int main(int argc,char **argv)
 		printf("read ency struct error\n");
 		return -1;
 	}
+	for(i = 0;i<src_len;i++)
+	{
+		printf("%02x ",ins_buff[i]);
+	}
+	printf("\n");
 
 
 	//get the len of src pcap file

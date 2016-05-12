@@ -104,12 +104,11 @@ int main()
  
   printf("bitnum:%d\n",bitnum);
   
-  unsigned char *buff = malloc(sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + 
-		  		sizeof(u16_t) * bitnum + (ipnum -1) * sizeof(u8_t));
   int buff_len = sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + sizeof(u16_t) * bitnum + (ipnum -1) * 16 * sizeof(u8_t);
+  unsigned char *buff = malloc(buff_len);
   printf("buff_len:%d\n",buff_len);
 
-#if 0 
+#if 1 
   printf("Result: (");
   for (i = 0; i < bitnum; i++) printf("%d ", indx[i]);
   printf(")\n");
@@ -130,7 +129,7 @@ int main()
  	 index[i] = indx[i];
   }
 
-#if 0
+#if 1
   for(i = 0;i<bitnum;i++)
   {
  	 printf("index:%d  ",index[i]);
@@ -138,6 +137,19 @@ int main()
   printf("\n");
 #endif
 
+  //copy ency struct data to buff
+  memcpy(buff,&session_num,sizeof(session_num));
+  memcpy(buff + sizeof(session_num),&len,sizeof(len));
+  memcpy(buff + sizeof(session_num) + sizeof(len),index,bitnum);
+
+#if 1
+  for(i = 0;i<bitnum;i++)
+  {
+  	printf("index:%d value:%d\n",index[i],index_value[i]);
+  }
+#endif
+
+#if 0
   i = 0;
   for(j = 0;j<ipnum;j++)
   {
@@ -147,15 +159,23 @@ int main()
   	    	   index_value[i] = value[j];
 	  }
   }
+#endif
+ for(i = 0;i<bitnum;i++)
+ {
+ 	printf("index:%d ",index[i]);
+	//printf("value:%d ",value[index[i]]);
+	int temp = value[index[i]];
+	printf("temp:%d ",temp);
+
+	index_value[i] = temp;
+ }
+
+
+  //copy encypt data to buff
+  memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,&index_value,bitnum);
   
   printf("stor index and value ok\n");
 
-#if 0
-  for(i = 0;i<bitnum;i++)
-  {
-  	printf("index:%d value:%d\n",index[i],index_value[i]);
-  }
-#endif
 
 
   
@@ -237,30 +257,20 @@ int main()
     		}
 		printf("\n");
 		printf("\n");
-		#endif
+#endif
 		
 
 	}
+  	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
 	/***********************end encrypt ip and fill**********************/
+#if 1
+  for(i = 0;i<bitnum;i++)
+  {
+  	printf("index:%d value:%d\n",index[i],index_value[i]);
+  }
+#endif
 
-	memcpy(buff,&session_num,sizeof(session_num));
-	memcpy(buff + sizeof(session_num),&len,sizeof(len));
-	memcpy(buff + sizeof(session_num) + sizeof(len),index,bitnum);
-	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,&index_value,bitnum);
-	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
 
-		#if 1
-		//show the encrypt data
-   		printf ("*************encrypted data**************************\n");  
-		for(i = 0;i<27;i++){
-		for (idx=0; idx<16; idx++) 
-    		{
-   	    		 printf ("%.2x ",ip1_ip3[i][idx]);
-    		}
-		}
-		printf("\n");
-		#endif
-	
 	//open output file
 	FILE *fpd;
 	if((fpd = fopen("output.txt","a+")) == NULL)
@@ -269,12 +279,14 @@ int main()
 		return 0;
 	}
 	printf("fwrite ret:%d\n",fwrite(buff,1,buff_len,fpd));
-	printf("bitnum:%d\n",bitnum);
-	for(i = 0;i<(5+bitnum *3+(ipnum - 1)*16);i++)
-	{
 
-		printf("i:%d %#02x ",i,buff[i]);
+#if 1
+	printf("bitnum:%d\n",bitnum);
+	for(i = 0;i<buff_len;i++)
+	{
+		printf("%02x ",buff[i]);
 	}
+#endif
 
 	free(buff);
 	fclose(fpd);

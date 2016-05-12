@@ -14,11 +14,12 @@ int main()
 	int cur_point = 0,file_len = 0;
 	int dencrypt_index = 0;
 
+	int ipnum = 27;
   	//encrypt struct
   	uint32_t session_num;
   	unsigned char  len;
-  	//unsigned char  index[bitnum];
-  	//unsigned short index_value[bitnum];
+  	//unsigned char  index[32];
+  	//unsigned short index_value[32];
   	//unsigned char  ip1_ip3[ipnum-1][16] ;
 	
 
@@ -134,7 +135,7 @@ int main()
 #endif
 	printf("****************end ip data********************/\n\n");
 
-	int payload_len = ip_data->iph_len;
+	int payload_len = ntohs(ip_data->iph_len);
 	printf("payload_len:%d\n",payload_len);
 #if 0
 	printf("************tcp header data****************/\n");
@@ -152,16 +153,39 @@ int main()
 	//printf("cur_point:%d\n",cur_point);
 	unsigned char *buff = malloc(payload_len);
 	fread(buff,1,payload_len,fpd);
-	
-	for(i = 0;i<446;i++)
+
+#if 1
+	for(i = 0;i<466;i++)
 	{
 		printf("%02x ",buff[i]);
 	}
+#endif
 	memcpy(&session_num,buff,4);	
 	printf("\nsession_num:%d\n",session_num);
+
 	memcpy(&len,buff+4,1);
 	printf("len:%d\n",len);
 	
+	unsigned char index[len];
+	memcpy(index,buff+5,len);
+	printf("index:");
+	for(i = 0;i<len;i++)
+	{
+		printf("%d ",index[i]);
+	}
+	printf("\n");
+
+	unsigned short index_value[len];
+	memcpy(&index_value,buff + 5 + len,len * 2);
+	printf("index value:");
+	for(i = 0;i<len;i++)
+	{
+		printf("%d ",index_value[i]);
+	}
+	printf("\n");
+	
+	unsigned char ip1_ip3[ipnum-1][16];
+	memcpy(ip1_ip3,buff + 5 + len *3,(ipnum-1)*16);
 
 #if 0
 	for(i = 0;i<4;i++)
