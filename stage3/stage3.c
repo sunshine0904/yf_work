@@ -27,14 +27,8 @@ int main()
 	gettimeofday(&start,NULL);
 	
 	unsigned char ip1[4] = {0xc0,0xa8,0xff,0x1};//prev.txt
-	unsigned char key1[16] = {0xd3,0xc0,0xff,0x14,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+	unsigned char key1[16] = {0xc0,0xa8,0xf5,0x2,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 	unsigned char ip[4] = {0xd3,0xc0,0xff,0x14};
-	struct m_ip ip3;
-	memcpy(ip3.ip_h,ip,4);
-	ip3.ip_dec[0] = 211;
-	ip3.ip_dec[1] = 192;
-	ip3.ip_dec[2] = 255;
-	ip3.ip_dec[3] = 20;
 
 	//expand key
     	unsigned char  expKey[4 * Nc * (Nr + 1)];
@@ -154,8 +148,8 @@ int main()
 	unsigned char *buff = malloc(payload_len);
 	fread(buff,1,payload_len,fpd);
 
-#if 1
-	for(i = 0;i<466;i++)
+#if 0
+	for(i = 0;i<448;i++)
 	{
 		printf("%02x ",buff[i]);
 	}
@@ -184,67 +178,30 @@ int main()
 	}
 	printf("\n");
 	
+	AES_ExpandKey(key1,expKey);
+
 	unsigned char ip1_ip3[ipnum-1][16];
 	memcpy(ip1_ip3,buff + 5 + len *3,(ipnum-1)*16);
-
-#if 0
-	for(i = 0;i<4;i++)
+	for(i = 0;i<ipnum-1;i++)
 	{
-		printf("encrypt_ip%d:\n",i);
-		for(j = 0;j < 16;j++)
+		printf("encrypt data:\n");
+		for(j = 0;j<16;j++)
 		{
-			printf("%02x ",aes_struct->aes[i].ip1_ip3_time[j]);
+			printf("%02x ",ip1_ip3[i][j]);
 		}
 		printf("\n");
-	}
+	
 
-#if 0
-	for(j = 0;j<4;j++)
-	{
-		printf("%02x ",compare_ip[j]);
-	}
-	printf("\n");
-#endif
-	for(j = 0;j<4;j++)
-	{
-		printf("compare_ip:%02x  ip1:%02x\n",compare_ip[j],ip1[j]);
-		if(compare_ip[j] == ip1[j])
-		{
-			if(j == 3)
-			{
-				printf("the same ip\n");
-			}
-		}
-		else
-		{
-			printf("it is the different ip\n");
-			break;
-		}
-	}
-
-#if 0
-	for(i = 0;i<4;i++)
-	{
-		AES_ExpandKey(key[i],expKey);
-		AES_Decrypt(aes_struct->aes[i].ip1_ip3_time,expKey,dencrypt);
-		printf("ip%d:\n",i);
+		AES_Decrypt(ip1_ip3[i],expKey,dencrypt);
+		printf("decrypt data:\n");
 		for(j = 0;j<16;j++)
 		{
 			printf("%02x ",dencrypt[j]);
 		}
 		printf("\n");
 	}
-#endif
-#if 0
-	for( i = 0;i<sizeof(struct encrypt_ip);i++)
-	{
-		printf("%02x  ",((unsigned char *)aes_struct)[i]);
-	}
-	printf("\n");
-#endif
-	cur_point += sizeof(struct encrypt_ip);
-	printf("*********************end aes_struct data********************\n");
-#endif
+	printf("\n\n");
+
 
 	cur_point = cur_point + (packet_header->len - sizeof(struct ether_header) - sizeof(struct ipheader) - sizeof(struct tcphdr));
 	printf("\n****************end packet header data*********************/\n\n");
