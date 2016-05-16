@@ -1,9 +1,22 @@
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include "head.h"
 #include "struct_head.h"
 #include "aes_lib.h"
+
+
+
+#if 1
+int gbit(unsigned int a,int b)
+{
+	if(a & 1<< b)
+		return 1;
+	else
+		return 0;
+}
+#endif	
 
 
 int main()
@@ -27,8 +40,14 @@ int main()
 	gettimeofday(&start,NULL);
 	
 	unsigned char ip1[4] = {0xc0,0xa8,0xff,0x1};//prev.txt
-	unsigned char key1[16] = {0xc0,0xa8,0xf5,0x2,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-	unsigned char ip[4] = {0xd3,0xc0,0xff,0x14};
+	//unsigned char ip2[4] = {0xc0,0xa8,0xf5,0x1};//key
+	unsigned int  ip2 = 0xc0<<24 | 0xa8 << 16 | 0xf5 << 8 | 0x02;
+	unsigned int temp_ip2 = htonl(ip2);
+	unsigned char key1[16] = {0};
+	memset(key1,0,16);
+	memcpy(key1,&temp_ip2,4);
+
+	unsigned char ip3[4] = {0xc0,0xc1,0xff,0x01};
 
 	//expand key
     	unsigned char  expKey[4 * Nc * (Nr + 1)];
@@ -163,11 +182,15 @@ int main()
 	unsigned char index[len];
 	memcpy(index,buff+5,len);
 	printf("index:");
+	int temp = 0;
 	for(i = 0;i<len;i++)
 	{
-		printf("%d ",index[i]);
+		//printf("%d ",index[i]);
+		printf("%d ",gbit(ip2,index[i]));
+		printf("temp:%d \n",temp);
+		temp += pow(2,(len-i-1))*gbit(ip2,index[i]); 
 	}
-	printf("\n");
+	printf("temp:%d \n",temp);
 
 	unsigned short index_value[len];
 	memcpy(&index_value,buff + 5 + len,len * 2);
@@ -177,6 +200,8 @@ int main()
 		printf("%d ",index_value[i]);
 	}
 	printf("\n");
+	
+	
 	
 	AES_ExpandKey(key1,expKey);
 
