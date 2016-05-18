@@ -87,7 +87,7 @@ int main()
   u32_t session_num ;
   u8_t  len;
   u8_t  index[bitnum];
-  u16_t index_value[bitnum];
+  u32_t index_value[ipnum];
   u8_t  ip1_ip3[ipnum-1][16] ;
   
   
@@ -104,7 +104,7 @@ int main()
  
   printf("bitnum:%d\n",bitnum);
   
-  int buff_len = sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + sizeof(u16_t) * bitnum + (ipnum -1) * 16 * sizeof(u8_t);
+  int buff_len = sizeof(session_num) + sizeof(len) + sizeof(u8_t) * bitnum + sizeof(u32_t) * ipnum + (ipnum -1) * 16 * sizeof(u8_t);
   unsigned char *buff = malloc(buff_len);
   printf("buff_len:%d\n",buff_len);
 
@@ -142,15 +142,15 @@ int main()
   memcpy(buff + sizeof(session_num),&len,sizeof(len));
   memcpy(buff + sizeof(session_num) + sizeof(len),index,bitnum);
 
+#if 0
   for(i = 0;i<bitnum;i++)
   {
 	index_value[i] = value[indx[i]];
 	
   }
 
-#if 0
   printf("index_value:");
-  for(i = 0;i<9;i++)
+  for(i = 0;i<ipnum;i++)
   {
   	printf("%d ",index_value[i]);
   }
@@ -158,7 +158,7 @@ int main()
 #endif
 
   //copy encypt data to buff
-  memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,index_value,bitnum * 2);
+  memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum,value,ipnum * 4);
   
   printf("stor index and value ok\n");
 
@@ -245,7 +245,7 @@ int main()
 		
 
 	}
-  	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u16_t)*bitnum,ip1_ip3,(ipnum-1)*16);
+  	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u32_t)*ipnum,ip1_ip3,(ipnum-1)*16);
 	/***********************end encrypt ip and fill**********************/
 #if 1
   for(i = 0;i<bitnum;i++)
