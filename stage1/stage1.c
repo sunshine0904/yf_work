@@ -247,12 +247,6 @@ int main()
 	}
   	memcpy(buff + sizeof(session_num) + sizeof(len)+sizeof(u8_t)*bitnum + sizeof(u32_t)*ipnum,ip1_ip3,(ipnum-1)*16);
 	/***********************end encrypt ip and fill**********************/
-#if 1
-  for(i = 0;i<bitnum;i++)
-  {
-  	printf("index:%d value:%d\n",index[i],index_value[i]);
-  }
-#endif
 
 
 	//open output file
@@ -270,6 +264,7 @@ int main()
 	{
 		printf("%02x ",buff[i]);
 	}
+	printf("\n");
 #endif
 
 	free(buff);
