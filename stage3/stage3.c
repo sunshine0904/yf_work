@@ -192,12 +192,21 @@ int main()
 	}
 	printf("temp:%d \n",temp);
 
-	unsigned short index_value[len];
-	memcpy(&index_value,buff + 5 + len,len * 2);
+	unsigned int index_value[len];
+	memcpy(&index_value,buff + 5 + len,ipnum * 4);
 	printf("index value:");
-	for(i = 0;i<len;i++)
+	for(i = 0;i<ipnum;i++)
 	{
 		printf("%d ",index_value[i]);
+	}
+	printf("\n");
+	
+	for(i = 0;i<ipnum;i++)
+	{
+		if(index_value[i] == temp)
+		{
+			printf("the data we decrypt:%d\n",i);
+		}
 	}
 	printf("\n");
 	
