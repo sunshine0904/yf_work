@@ -40,8 +40,8 @@ int main()
 	gettimeofday(&start,NULL);
 	
 	unsigned char ip1[4] = {0xc0,0xa8,0xff,0x1};//prev.txt
-	//unsigned char ip2[4] = {0xc0,0xa8,0xf5,0x1};//key
-	unsigned int  ip2 = 0xc0<<24 | 0xa8 << 16 | 0xf5 << 8 | 0x02;
+	//unsigned int  ip2 = 0xc0<<24 | 0xa8 << 16 | 0xf5 << 8 | 0x02;//key
+	unsigned int  ip2 = 0xc0<<24 | 0xc1 << 16 | 0xff << 8 | 0x01;
 	unsigned int temp_ip2 = htonl(ip2);
 	unsigned char key1[16] = {0};
 	memset(key1,0,16);
@@ -95,20 +95,20 @@ int main()
 	printf("*****************packet header data*************************/\n");
 	printf("count:%d\n",count++);
 	fseek(fpd,cur_point,SEEK_SET);	
-	printf("1111cur_point:%d\n",cur_point);
+	//printf("1111cur_point:%d\n",cur_point);
 	fread(packet_header,1,sizeof(struct pkt_header),fpd);
 	cur_point += sizeof(struct pkt_header);
-	printf("2222cur_point:%d\n",cur_point);
+	//printf("2222cur_point:%d\n",cur_point);
 	printf("pkt_header:\nsec_time:%#x  usec_time:%#x   caplen:%#x  len:%#x\n",packet_header->sec_time,packet_header->usec_time,packet_header->caplen,packet_header->len);
 
 	//fseek(fpd,cur_point+sizeof(struct pkt_header)+sizeof(struct ether_header)+sizeof(struct ipheader),SEEK_SET);
 	
-	printf("********************eth data****************************/\n");
+	//printf("********************eth data****************************/\n");
 	fseek(fpd,cur_point,SEEK_SET);
-	printf("1111cur_point:%d\n",cur_point);
+	//printf("1111cur_point:%d\n",cur_point);
 	fread(eth_data,1,sizeof(struct ether_header),fpd);
 	cur_point += sizeof(struct ether_header);
-	printf("2222cur_point:%d\n",cur_point);
+	//printf("2222cur_point:%d\n",cur_point);
 
 #if 0
 	printf("dst mac :");
@@ -128,15 +128,15 @@ int main()
 	printf("eth_type: ");
 	printf("%#.4x \n",eth_data->eth_typ_len[0] << 8 | eth_data->eth_typ_len[1]);
 #endif
-	printf("********************end eth data****************************/\n\n");
+	//printf("********************end eth data****************************/\n\n");
 	
 
-	printf("*********************ip data********************\n");	
+	//printf("*********************ip data********************\n");	
 	fseek(fpd,cur_point,SEEK_SET);
-	printf("1111cur_point:%d\n",cur_point);
+	//printf("1111cur_point:%d\n",cur_point);
 	fread(ip_data,1,sizeof(struct ipheader),fpd);
 	cur_point += sizeof(struct ipheader);
-	printf("2222cur_point:%d\n",cur_point);
+	//printf("2222cur_point:%d\n",cur_point);
 
 #if 0
 	printf("ipversion and iphdr_len:%#x  ",ip_data->iplv);
@@ -146,7 +146,7 @@ int main()
 	printf("ip_srcip:%#x  ",ip_data->iph_sourceip);
 	printf("ip_dstip:%#x  \n",ip_data->iph_destip);
 #endif
-	printf("****************end ip data********************/\n\n");
+	//printf("****************end ip data********************/\n\n");
 
 	int payload_len = ntohs(ip_data->iph_len);
 	printf("payload_len:%d\n",payload_len);
@@ -185,12 +185,12 @@ int main()
 	int temp = 0;
 	for(i = 0;i<len;i++)
 	{
-		//printf("%d ",index[i]);
-		printf("%d ",gbit(ip2,index[i]));
-		printf("temp:%d \n",temp);
+		printf("%d ",index[i]);
+		//printf("%d ",gbit(ip2,index[i]));
+		//printf("temp:%d \n",temp);
 		temp += pow(2,(len-i-1))*gbit(ip2,index[i]); 
 	}
-	printf("temp:%d \n",temp);
+	printf("key_index_value:%d \n",temp);
 
 	unsigned int index_value[len];
 	memcpy(&index_value,buff + 5 + len,ipnum * 4);
@@ -200,12 +200,14 @@ int main()
 		printf("%d ",index_value[i]);
 	}
 	printf("\n");
-	
+
+	int decry_index = 0;
 	for(i = 0;i<ipnum;i++)
 	{
 		if(index_value[i] == temp)
 		{
 			printf("the data we decrypt:%d\n",i);
+			decry_index = i;
 		}
 	}
 	printf("\n");
@@ -214,8 +216,56 @@ int main()
 	
 	AES_ExpandKey(key1,expKey);
 
+	unsigned char ip1_ip3[16] = {0};
+	memcpy(ip1_ip3,buff + 5 +len + ipnum * 4 + ((decry_index -1) * 16),16);
+	
+	AES_Decrypt(ip1_ip3,expKey,dencrypt);
+	printf("decrypt data:\n");
+	for(j = 0;j<16;j++)
+	{
+		printf("%02x ",dencrypt[j]);
+	}
+	printf("\n");
+	
+	unsigned char compare_ip[4] = {0};
+	unsigned char read_ip[4] = {0};
+	FILE  *fc = NULL;
+	unsigned char ip_buff[25] = {0};
+	if((fc = fopen("cmp_ip.txt","r+")) == NULL)
+	{
+		printf("open cmp_ip file failure\n");
+		exit(0);
+	}
+			
+
+	memcpy(compare_ip,dencrypt,4);
+	fgets(ip_buff,20,fc);
+	fclose(fc);
+	printf("read_ip:%s\n",ip_buff);
+	inet_aton(ip_buff,read_ip);
+
+	for(j = 0;j<4;j++)
+	{
+		//printf("compare_ip:%02x  ip1:%02x\n",compare_ip[j],read_ip[j]);
+		if(compare_ip[j] == read_ip[j])
+		{
+			if(j == 3)
+			{
+				printf("cmp result: the same ip\n");
+			}
+		}
+		else
+		{
+			printf("cmp result:it is the different ip\n");
+			break;
+		}
+	}
+
+	
+#if 0
+	//decrypt all data
 	unsigned char ip1_ip3[ipnum-1][16];
-	memcpy(ip1_ip3,buff + 5 + len *3,(ipnum-1)*16);
+	memcpy(ip1_ip3,buff + 5 + len + ipnum*4,(ipnum-1)*16);
 	for(i = 0;i<ipnum-1;i++)
 	{
 		printf("encrypt data:\n");
@@ -235,7 +285,7 @@ int main()
 		printf("\n");
 	}
 	printf("\n\n");
-
+#endif
 
 	cur_point = cur_point + (packet_header->len - sizeof(struct ether_header) - sizeof(struct ipheader) - sizeof(struct tcphdr));
 	printf("\n****************end packet header data*********************/\n\n");
