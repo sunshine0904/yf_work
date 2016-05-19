@@ -16,7 +16,7 @@ int main(int argc,char **argv)
 	uint32_t i = 0,j = 0,count = 0,src_len = 0,tcphdr_data_len = 0;
 	int write_data_len = atoi(argv[1]);
 	unsigned char *ins_buff = NULL,*eth_ip_buff = NULL,*tcphdr_data_buff = NULL;
-	int src_cur_point = 0,dst_cur_point = 0,file_len = 0;
+	long int src_cur_point = 0,dst_cur_point = 0,file_len = 0;
 	struct pcap_header *file_header = (struct pcap_header *)malloc(sizeof(struct pcap_header));
 	struct pkt_header *packet_header = (struct pkt_header *)malloc(sizeof(struct pkt_header));
 
@@ -28,7 +28,8 @@ int main(int argc,char **argv)
 	printf("write_payload_data_len:%d\n",write_data_len);
 
 
-	if((fpd = fopen("10.pcap","r"))==NULL)
+	//if((fpd = fopen("10.pcap","r"))==NULL)
+	if((fpd = fopen("../../jl/pcap_yf/pcap/100.pcap","r"))==NULL)
 	{
 		printf("open 10.pcap file failure\n");
 		exit(0);
@@ -38,7 +39,7 @@ int main(int argc,char **argv)
 		printf("open output.txt file failure\n");
 		exit(0);
 	}
-	if((fpp = fopen("mod10.pcap","w+"))==NULL)
+	if((fpp = fopen("mod100.pcap","w+"))==NULL)
 	{
 		printf("open mod10.pcap file failure\n");
 		exit(0);
@@ -130,10 +131,10 @@ int main(int argc,char **argv)
 	
 	//write eth header data
 	fseek(fpp,dst_cur_point,SEEK_SET);	
-	printf("--->eth1 dst_point:%d\n",dst_cur_point);
+	//printf("--->eth1 dst_point:%d\n",dst_cur_point);
 	fwrite(eth_data,1,sizeof(struct ether_header),fpp);
 	dst_cur_point = dst_cur_point + sizeof(struct ether_header);
-	printf("--->eth2 dst_point:%d\n",dst_cur_point);
+	//printf("--->eth2 dst_point:%d\n",dst_cur_point);
 
 	//read ip header data
 	fseek(fpd,src_cur_point,SEEK_SET);
@@ -147,10 +148,10 @@ int main(int argc,char **argv)
 
 	//write ip header data
 	fseek(fpp,dst_cur_point,SEEK_SET);	
-	printf("--->ip1 dst_point:%d\n",dst_cur_point);
+	//printf("--->ip1 dst_point:%d\n",dst_cur_point);
 	fwrite(ip_data,1,sizeof(struct ipheader),fpp);
 	dst_cur_point += sizeof(struct ipheader);
-	printf("--->ip2 dst_point:%d\n",dst_cur_point);
+	//printf("--->ip2 dst_point:%d\n",dst_cur_point);
 	
 	
 	
@@ -172,17 +173,17 @@ int main(int argc,char **argv)
 	//read tcphdr data
 	fseek(fpd,src_cur_point,SEEK_SET);
 	printf(">>>>>read tcp_hdr src_point1111:%d\n",src_cur_point);	
-	tcphdr_buff = malloc(sizeof(struct tcphdr));
+	//tcphdr_buff = malloc(sizeof(struct tcphdr));
 	fread(tcphdr_buff,1,sizeof(struct tcphdr),fpd);
 	src_cur_point += sizeof(struct tcphdr);
 	printf(">>>>>read tcp_hdr src_point2222:%d\n",src_cur_point);	
 
 	//write tcphdr data
 	fseek(fpp,dst_cur_point,SEEK_SET);
-	printf("--->tcphdr1 dst_point:%d\n",dst_cur_point);
+	//printf("--->tcphdr1 dst_point:%d\n",dst_cur_point);
 	fwrite(tcphdr_buff,1,sizeof(struct tcphdr),fpp);
 	dst_cur_point += sizeof(struct tcphdr);
-	printf("--->tcphdr2 dst_point:%d\n",dst_cur_point);
+	//printf("--->tcphdr2 dst_point:%d\n",dst_cur_point);
 
 
 	printf("the space we need\n");
@@ -190,10 +191,10 @@ int main(int argc,char **argv)
 	//write encypt struct
 	printf("---------wirte the encypt struct---------\n");
 	fseek(fpp,dst_cur_point,SEEK_SET);	
-	printf("--->ency1 dst_point:%d\n",dst_cur_point);
+	//printf("--->ency1 dst_point:%d\n",dst_cur_point);
 	fwrite(ins_buff,1,src_len,fpp);
 	dst_cur_point = dst_cur_point + src_len;
-	printf("--->ency2 dst_point:%d\n",dst_cur_point);
+	//printf("--->ency2 dst_point:%d\n",dst_cur_point);
 
 	
 	//read tcp data
@@ -209,10 +210,11 @@ int main(int argc,char **argv)
 
 	//write tcp data 
 	fseek(fpp,dst_cur_point,SEEK_SET);	
-	printf("--->tcpdata1 dst_point:%d\n",dst_cur_point);
+	//printf("--->tcpdata1 dst_point:%d\n",dst_cur_point);
 	printf("write:%d\n",fwrite(tcphdr_data_buff,1,write_data_len,fpp));
+	free(tcphdr_data_buff);
 	dst_cur_point = dst_cur_point + write_data_len;
-	printf("--->tcpdata2 dst_point:%d\n",dst_cur_point);
+	//printf("--->tcpdata2 dst_point:%d\n",dst_cur_point);
 
 	printf("src_cur_point:%d\n",src_cur_point);
 
@@ -221,6 +223,11 @@ int main(int argc,char **argv)
 		
 	}
 
+	free(tcphdr_buff);
+	free(eth_data);
+	free(ip_data);
+	free(packet_header);
+	free(ins_buff);
 	fclose(fpp);
 	fclose(fpd);
 	fclose(fps);

@@ -1,5 +1,5 @@
 CC:=gcc
-CFLAGS:=-w
+CFLAGS:=-w -g
 OBJS:=stage2
 
 all:$(OBJS)
