@@ -3,7 +3,7 @@ struct_head.c struct_head.h文件是加密结构相关。
 mod10.pcap是stage2生成的包含由加密数据段的pcpa包。
 file_len.c show_pcap.c仅作为调试时使用。
 
-编译命令:gcc stage3.c aes_lib.c aes_lib.h head.h struct_head.c struct_head.h -lm -w -o stage3
-执行命令:./stage3
+编译命令:make
+执行命令:./stage3 ./origin
 
 

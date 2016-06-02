@@ -72,16 +72,16 @@ int main()
 	//printf("sizeof(struct pcap_header):%d\n",sizeof(struct pcap_header));
 	fseek(fpd,0,SEEK_END);
 	file_len = ftell(fpd);
-	printf("file_len:%d\n",ftell(fpd));
+	//printf("file_len:%d\n",ftell(fpd));
 
-	printf("*****************pcap file header*************************/\n");
+	//printf("*****************pcap file header*************************/\n");
 	fseek(fpd,0,SEEK_SET);
 	//printf("sizeof(pcap_header):%d\n",sizeof(struct pcap_header));
 	fread(file_header,1,sizeof(struct pcap_header),fpd);
 	cur_point += sizeof(struct pcap_header);
-	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
+	//printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
 
-	printf("*****************end pcap file header**************************/\n\n");
+	//printf("*****************end pcap file header**************************/\n\n");
 
 	
 	
@@ -90,16 +90,17 @@ int main()
 	{
 		if(!(cur_point < file_len))
 		{
+			printf("cur_point:%d file_len:%d\n",cur_point,file_len);
 			break;
 		}
-	printf("*****************packet header data*************************/\n");
-	printf("count:%d\n",count++);
+	//printf("*****************packet header data*************************/\n");
+	//printf("count:%d\n",count++);
 	fseek(fpd,cur_point,SEEK_SET);	
 	//printf("1111cur_point:%d\n",cur_point);
 	fread(packet_header,1,sizeof(struct pkt_header),fpd);
 	cur_point += sizeof(struct pkt_header);
 	//printf("2222cur_point:%d\n",cur_point);
-	printf("pkt_header:\nsec_time:%#x  usec_time:%#x   caplen:%#x  len:%#x\n",packet_header->sec_time,packet_header->usec_time,packet_header->caplen,packet_header->len);
+	//printf("pkt_header:\nsec_time:%#x  usec_time:%#x   caplen:%#x  len:%#x\n",packet_header->sec_time,packet_header->usec_time,packet_header->caplen,packet_header->len);
 
 	//fseek(fpd,cur_point+sizeof(struct pkt_header)+sizeof(struct ether_header)+sizeof(struct ipheader),SEEK_SET);
 	
@@ -149,7 +150,7 @@ int main()
 	//printf("****************end ip data********************/\n\n");
 
 	int payload_len = ntohs(ip_data->iph_len);
-	printf("payload_len:%d\n",payload_len);
+	//printf("payload_len:%d\n",payload_len);
 #if 0
 	printf("************tcp header data****************/\n");
 	fseek(fpd,cur_point,SEEK_SET);
@@ -161,10 +162,10 @@ int main()
 
 	cur_point += sizeof(struct tcphdr);
 
-	printf("*********************aes_struct data********************\n");	
+	//printf("*********************aes_struct data********************\n");	
 	 	
 	
-#if 0
+#if 1
 	fseek(fpd,cur_point,SEEK_SET);
 	//printf("cur_point:%d\n",cur_point);
 	unsigned char *buff = malloc(payload_len);
@@ -177,60 +178,60 @@ int main()
 	}
 #endif
 	memcpy(&session_num,buff,4);	
-	printf("\nsession_num:%d\n",session_num);
+	//printf("\nsession_num:%d\n",session_num);
 
 	memcpy(&len,buff+4,1);
-	printf("len:%d\n",len);
+	//printf("len:%d\n",len);
 	
 	unsigned char index[len];
 	memcpy(index,buff+5,len);
-	printf("index:");
+	//printf("index:");
 	int temp = 0;
 	for(i = 0;i<len;i++)
 	{
-		printf("%d ",index[i]);
-		//printf("%d ",gbit(ip2,index[i]));
-		//printf("temp:%d \n",temp);
+		//printf("%d ",index[i]);
 		temp += pow(2,(len-i-1))*gbit(ip2,index[i]); 
 	}
-	printf("key_index_value:%d \n",temp);
+	//printf("key_index_value:%d \n",temp);
 
 	unsigned int index_value[len];
 	memcpy(&index_value,buff + 5 + len,ipnum * 4);
-	printf("index value:");
+#if 0
+	//printf("index value:");
 	for(i = 0;i<ipnum;i++)
 	{
 		printf("%d ",index_value[i]);
 	}
 	printf("\n");
-
+#endif
 	int decry_index = 0;
 	for(i = 0;i<ipnum;i++)
 	{
 		if(index_value[i] == temp)
 		{
-			printf("the data we decrypt:%d\n",i);
+			//printf("the data we decrypt:%d\n",i);
 			decry_index = i;
 		}
 	}
-	printf("\n");
+	//printf("\n");
 	
 	
 	
-	AES_ExpandKey(key1,expKey);
+	//AES_ExpandKey(key1,expKey);
 
 	unsigned char ip1_ip3[16] = {0};
 	memcpy(ip1_ip3,buff + 5 +len + ipnum * 4 + ((decry_index -1) * 16),16);
 	
-	AES_Decrypt(ip1_ip3,expKey,dencrypt);
+	//AES_Decrypt(ip1_ip3,expKey,dencrypt);
+#if 0
 	printf("decrypt data:\n");
 	for(j = 0;j<16;j++)
-	{
+	{ 
 		printf("%02x ",dencrypt[j]);
 	}
 	printf("\n");
-	
-	unsigned char compare_ip[4] = {0};
+#endif	
+	unsigned char compare_ip[4] = {0xc0,0xa8,0xff,0x01};
 	unsigned char read_ip[4] = {0};
 #endif	
 
@@ -248,8 +249,8 @@ int main()
 	
 	fclose(fc);
 	
-#if 0
-	printf("read_ip:%s\n",ip_buff);
+#if 1
+	//printf("read_ip:%s\n",ip_buff);
 	inet_aton(ip_buff,read_ip);
 
 	for(j = 0;j<4;j++)
@@ -259,12 +260,12 @@ int main()
 		{
 			if(j == 3)
 			{
-				printf("cmp result: the same ip\n");
+				//printf("cmp result: the same ip\n");
 			}
 		}
 		else
 		{
-			printf("cmp result:it is the different ip\n");
+			//printf("cmp result:it is the different ip\n");
 			break;
 		}
 	}
@@ -297,7 +298,7 @@ int main()
 #endif
 
 	cur_point = cur_point + (packet_header->len - sizeof(struct ether_header) - sizeof(struct ipheader) - sizeof(struct tcphdr));
-	printf("\n****************end packet header data*********************/\n\n");
+	//printf("\n****************end packet header data*********************/\n\n");
 		
 	}
 	
@@ -305,6 +306,7 @@ int main()
         
 	unsigned long int timeuse = 1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec -start.tv_usec;
 	printf("timeuse:%lu us\n",timeuse);
+	printf("timeuse:%lu s\n",timeuse/1000000);
 
 	fclose(fpd);
 	return 0;
