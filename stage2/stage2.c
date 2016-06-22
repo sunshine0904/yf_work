@@ -28,8 +28,8 @@ int main(int argc,char **argv)
 	printf("write_payload_data_len:%d\n",write_data_len);
 
 
-	//if((fpd = fopen("10.pcap","r"))==NULL)
-	if((fpd = fopen("../../jl/pcap_yf/pcap/process100.pcap","r"))==NULL)
+	if((fpd = fopen("10.pcap","r"))==NULL)
+	//if((fpd = fopen("../../jl/pcap_yf/pcap/process100.pcap","r"))==NULL)
 	{
 		printf("open 10.pcap file failure\n");
 		exit(0);
