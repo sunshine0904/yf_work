@@ -27,6 +27,7 @@ int main()
 	int cur_point = 0,file_len = 0;
 	int dencrypt_index = 0;
 
+	
 	int ipnum = 18;
   	//encrypt struct
   	uint32_t session_num;
@@ -188,24 +189,73 @@ int main()
 		temp += pow(2,(len-i-1))*gbit(ip2,index[i]); 
 	}
 	//printf("key_index_value:%d \n",temp);
+  
+	unsigned int index_value1[len];
+	unsigned int index_value2[len];
+	unsigned int index_value3[len];
+        unsigned int index_value_size = 1;	
+	if(len < 9)
+  	{
+		index_value_size = 1;
+		memcpy(&index_value1,buff + 5 + len,ipnum * index_value_size);
+  	}
+	else if(len > 8 && len < 17)
+  	{
+		index_value_size = 2;
+		memcpy(&index_value2,buff + 5 + len,ipnum * index_value_size);
+  	}
+	else if(len > 16 && len < 33)
+  	{
+		index_value_size = 4;
+		memcpy(&index_value3,buff + 5 + len,ipnum * index_value_size);
+ 	}
+	
 
-	unsigned int index_value[len];
-	memcpy(&index_value,buff + 5 + len,ipnum * 4);
-#if 0
+#if 1
 	printf("index value:");
 	for(i = 0;i<ipnum;i++)
 	{
-		printf("%d ",index_value[i]);
+		if(index_value_size == 1)
+		{
+			printf("%02x ",index_value1[i]);
+		}
+		else if(index_value_size == 2)
+		{
+			printf("%02x ",index_value2[i]);
+		}
+		else if(index_value_size == 3)
+		{
+			printf("%d ",index_value3[i]);
+		}
 	}
 	printf("\n");
 #endif
 	int decry_index = 0;
 	for(i = 0;i<ipnum;i++)
 	{
-		if(index_value[i] == temp)
+		if(index_value_size == 1)
 		{
-			//printf("the data we decrypt:%d\n",i);
-			decry_index = i;
+			if(index_value1[i] == temp)
+			{
+				//printf("the data we decrypt:%d\n",i);
+				decry_index = i;
+			}
+		}
+		else if(index_value_size == 2)
+		{
+			if(index_value2[i] == temp)
+			{
+				//printf("the data we decrypt:%d\n",i);
+				decry_index = i;
+			}
+		}
+		else if(index_value_size == 3)
+		{
+			if(index_value3[i] == temp)
+			{
+				//printf("the data we decrypt:%d\n",i);
+				decry_index = i;
+			}
 		}
 	}
 	//printf("\n");
