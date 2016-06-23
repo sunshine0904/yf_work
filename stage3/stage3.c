@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "head.h"
 #include "struct_head.h"
 #include "aes_lib.h"
@@ -28,7 +29,7 @@ int main()
 	int dencrypt_index = 0;
 
 	
-	int ipnum = 18;
+	int ipnum = 27;
   	//encrypt struct
   	uint32_t session_num;
   	unsigned char  len;
@@ -82,7 +83,24 @@ int main()
 
 	//printf("*****************end pcap file header**************************/\n\n");
 
-	
+
+
+
+	void cost_write_loop()
+	{
+		while(1)
+		{
+			system("ps -aux| grep stage3 > tmp");
+		}
+	}
+
+	 pthread_t tid;
+         if(pthread_create(&tid,NULL,cost_write_loop,NULL) != 0)
+	 {
+	      printf("creae cost_loop thread error\n");
+	      return -1;
+	 }
+
 	
 
 	while(1)
@@ -168,10 +186,11 @@ int main()
 	fread(buff,1,payload_len,fpd);
 
 #if 0
-	for(i = 0;i<448;i++)
+	for(i = 0;i<payload_len;i++)
 	{
 		printf("%02x ",buff[i]);
 	}
+	printf("\n");
 #endif
 	memcpy(&session_num,buff,4);	
 	//printf("\nsession_num:%d\n",session_num);
@@ -190,8 +209,8 @@ int main()
 	}
 	//printf("key_index_value:%d \n",temp);
   
-	unsigned int index_value1[len];
-	unsigned int index_value2[len];
+	unsigned char index_value1[len];
+	unsigned  short int index_value2[len];
 	unsigned int index_value3[len];
         unsigned int index_value_size = 1;	
 	if(len < 9)
@@ -211,17 +230,17 @@ int main()
  	}
 	
 
-#if 1
+#if 0
 	printf("index value:");
 	for(i = 0;i<ipnum;i++)
 	{
 		if(index_value_size == 1)
 		{
-			printf("%02x ",index_value1[i]);
+			printf("%d ",index_value1[i]);
 		}
 		else if(index_value_size == 2)
 		{
-			printf("%02x ",index_value2[i]);
+			printf("%d ",index_value2[i]);
 		}
 		else if(index_value_size == 3)
 		{
@@ -265,7 +284,7 @@ int main()
 	AES_ExpandKey(key1,expKey);
 
 	unsigned char ip1_ip3[16] = {0};
-	memcpy(ip1_ip3,buff + 5 +len + ipnum * 4 + ((decry_index -1) * 16),16);
+	memcpy(ip1_ip3,buff + 5 +len + ipnum * index_value_size + ((decry_index -1) * 16),16);
 	
 	AES_Decrypt(ip1_ip3,expKey,dencrypt);
 	
