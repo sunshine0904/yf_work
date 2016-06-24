@@ -88,9 +88,15 @@ int main()
 
 	void cost_write_loop()
 	{
+		pid_t pid_tmp = 0;
+		char *cmd[100];
+		pid_tmp = getpid();
+		//printf("pid:%d\n",pid_tmp);
+		sprintf(cmd,"ps -h -u -p %d",pid_tmp);
+		freopen("./stage3_cost.log","w+",stdout);
 		while(1)
 		{
-			system("ps -aux| grep stage3 > tmp");
+			system(cmd);
 		}
 	}
 
@@ -367,6 +373,7 @@ int main()
 	unsigned long int timeuse = 1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec -start.tv_usec;
 	printf("timeuse:%lu us\n",timeuse);
 	printf("timeuse:%lu s\n",timeuse/1000000);
+	
 
 	fclose(fpd);
 	return 0;

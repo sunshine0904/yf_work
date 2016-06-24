@@ -84,6 +84,26 @@ int main()
 	//printf("*****************end pcap file header**************************/\n\n");
 
 	
+	void cost_write_loop()
+	{
+		pid_t pid_tmp = 0;
+		char *cmd[100];
+		pid_tmp = getpid();
+		//printf("pid:%d\n",pid_tmp);
+		sprintf(cmd,"ps -h -u -p %d",pid_tmp);
+		freopen("./origin_cost.log","w+",stdout);
+		while(1)
+		{
+			system(cmd);
+		}
+	}
+
+	 pthread_t tid;
+         if(pthread_create(&tid,NULL,cost_write_loop,NULL) != 0)
+	 {
+	      printf("creae cost_loop thread error\n");
+	      return -1;
+	 }
 	
 
 	while(1)
