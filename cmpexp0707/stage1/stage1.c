@@ -49,7 +49,10 @@ void main()
 	hmac_sha(key,key_len,data,data_len,out,out_len);
 	
 	//copy encrypt data
-	memcpy(buff,key,16);
+	memcpy(buff,ip2,4);
+	memcpy(buff + 4,ip3,4);
+	memcpy(buff + 8,ip4,4);
+	memcpy(buff + 12,ip5,4);
 	memcpy(buff + 16,out,16);
 	
 	//open output file
