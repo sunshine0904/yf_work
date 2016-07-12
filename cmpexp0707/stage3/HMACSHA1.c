@@ -240,7 +240,7 @@ void hmac_sha
 /* truncate and print the results */
 	t = t > SHA_DIGESTSIZE ? SHA_DIGESTSIZE : t ;
 	truncate(osha, out, t) ;
-	pr_sha(stdout, out, t) ;
+	//pr_sha(stdout, out, t) ;
 
 }
 

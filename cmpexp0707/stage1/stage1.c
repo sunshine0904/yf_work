@@ -25,7 +25,7 @@ void main()
 	u8_t out[16] = {0x0};
 	u8_t out_len = 16;
 
-
+	int i = 0 ;
 	//def buff to storage encrypt data
 	u8_t *buff = NULL;
 	u8_t buff_len = 0;
@@ -47,7 +47,15 @@ void main()
 	memcpy(data+12,ip5,4);
 
 	hmac_sha(key,key_len,data,data_len,out,out_len);
-	
+
+	printf("key:\n");
+	for(i = 0;i<key_len;i++)
+	{
+		printf("%02x ",key[i]);
+	}
+	printf("\n");
+
+
 	//copy encrypt data
 	memcpy(buff,ip2,4);
 	memcpy(buff + 4,ip3,4);

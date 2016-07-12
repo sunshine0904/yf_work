@@ -1,8 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "sha1.h"
 #include "head.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 
 
 
@@ -10,8 +11,8 @@ unsigned char ip1[4] = {0xc0,0xa8,0x1,0x1};
 
 int main()
 {
-	FILE *fpo,*fps,*fpd;
-	long int src_cur_point = 0,dst_cur_point = 0,file_len = 0,encry_data_len = 0;
+	FILE *fpo,*fps,*fpd,*fpp;
+	long int src_cur_point = 0,dst_cur_point = 0,file_len = 0,encry_data_len = 0,tcp_data_len = 0;
 	int i = 0,equal_flag = 0;
 	
 	//variable about hmac_sha
@@ -60,6 +61,12 @@ int main()
 		printf("open mod100.pcap file failure\n");
 		exit(0);
 	}
+	if((fpp = fopen("stage3.pcap","a+"))==NULL)
+	{
+		printf("open stage3.pcap file failure\n");
+		exit(0);
+	}
+	
 	
 	//get the output.txt len
 	fseek(fpo,0,SEEK_END);
@@ -76,6 +83,7 @@ int main()
 
 
 	printf("*****************pcap file header*************************/\n");
+	//read pcap header
 	fseek(fpd,0,SEEK_SET);
 	////printf("sizeof(pcap_header):%d\n",sizeof(struct pcap_header));
 	printf(">>>>>>>read file_header src_point1111:%d\n",src_cur_point);
@@ -86,6 +94,14 @@ int main()
 	
 	
 	printf("pcap_header:\nmagic:%#x\n version_major:%#x version_minor:%#x\nthiszone:%#x\nsigfigs:%#x\nsnaplen:%#x\nlinktype:%#x\n",file_header->magic,file_header->version_major,file_header->version_minor,file_header->thiszone,file_header->sigfigs,file_header->snaplen,file_header->linktype);
+
+	//write pcap header
+	fseek(fpp,0,SEEK_SET);
+	printf("write file header:%d\n",fwrite(file_header,1,sizeof(struct pcap_header),fpp));
+	dst_cur_point += sizeof(struct pcap_header);
+
+	
+
 
 	printf("*****************end pcap file header**************************/\n\n");
 
@@ -101,7 +117,7 @@ int main()
 		}
 		
 
-
+	printf("\n");
 	//printf("*****************packet header data*************************/\n");
 	////printf("src_cur_point:%d\n",src_cur_point);
 	//printf("count:%d\n",count++);
@@ -114,6 +130,12 @@ int main()
 	src_cur_point +=sizeof(struct pkt_header);
 	//printf(">>>>>>>read pkt_hdr src_point2222:%d\n",src_cur_point);
 
+	//write pkt_header data
+	printf("--->pkt_head1 dst_point:%d\n",dst_cur_point);
+	fseek(fpp,dst_cur_point,SEEK_SET);	
+	printf("write packet header:%d\n",fwrite(packet_header,1,sizeof(struct pkt_header),fpp));
+	dst_cur_point +=sizeof(struct pkt_header);
+	printf("--->pkt_head2 dst_point:%d\n",dst_cur_point);
 
     	//read eth header data
 	fseek(fpd,src_cur_point,SEEK_SET);
@@ -122,7 +144,12 @@ int main()
 	src_cur_point += sizeof(struct ether_header);
 	//printf(">>>>>read eth_hdr src_point2222:%d\n",src_cur_point);	
 	
-	////printf("--->eth2 dst_point:%d\n",dst_cur_point);
+	//write eth header data
+	fseek(fpp,dst_cur_point,SEEK_SET);	
+	printf("--->eth1 dst_point:%d\n",dst_cur_point);
+	printf("write eth header:%d\n",fwrite(eth_data,1,sizeof(struct ether_header),fpp));
+	dst_cur_point = dst_cur_point + sizeof(struct ether_header);
+	printf("--->eth2 dst_point:%d\n",dst_cur_point);
 
 	//read ip header data
 	fseek(fpd,src_cur_point,SEEK_SET);
@@ -132,6 +159,14 @@ int main()
 	src_cur_point += sizeof(struct ipheader);
 	//printf(">>>>>read ip_hdr src_point2222:%d\n",src_cur_point);	
 
+	//write ip header data
+	fseek(fpp,dst_cur_point,SEEK_SET);	
+	printf("--->ip1 dst_point:%d\n",dst_cur_point);
+	printf("write ip header:%d\n",fwrite(ip_data,1,sizeof(struct ipheader),fpp));
+	tcp_data_len = ntohs(ip_data->iph_len) - sizeof(struct ipheader) - sizeof(struct tcphdr);		
+	printf("tcp_data_len:%d\n",tcp_data_len);
+	dst_cur_point += sizeof(struct ipheader);
+	printf("--->ip2 dst_point:%d\n",dst_cur_point);
 	
 
 	//read tcphdr data
@@ -142,41 +177,78 @@ int main()
 	src_cur_point += sizeof(struct tcphdr);
 	//printf(">>>>>read tcp_hdr src_point2222:%d\n",src_cur_point);	
 
-
+	//write tcphdr data
+	fseek(fpp,dst_cur_point,SEEK_SET);
+	printf("--->tcphdr1 dst_point:%d\n",dst_cur_point);
+	printf("write tcphdr :%d\n",fwrite(tcphdr_buff,1,sizeof(struct tcphdr),fpp));
+	dst_cur_point += sizeof(struct tcphdr);
+	printf("--->tcphdr2 dst_point:%d\n",dst_cur_point);
 	
 	//read tcp data
     	fseek(fpd,src_cur_point,SEEK_SET);
 	//printf(">>>>>read tcp_data src_point1111:%d\n",src_cur_point);	
-	fread(encry_data,1,encry_data_len,fpd);
-	//src_cur_point = src_cur_point + tcphdr_data_len;
+	unsigned char *tmp_buf = malloc(tcp_data_len);
+	fread(tmp_buf,1,tcp_data_len,fpd);
+	//fread(encry_data,1,encry_data_len,fpd);
+	src_cur_point = src_cur_point + tcp_data_len;
 	//printf(">>>>>read tcp_data src_point2222:%d\n",src_cur_point);	
-
-	printf("encry_data:\n");
+#if 0
+	printf("encry_data:pvf and pvf'\n");
 	for(i = 0;i<encry_data_len;i++)
 	{
 		printf("%02x ",encry_data[i]);
 	}
 	printf("\n");
-
+#endif
 	unsigned char *pvf2 = encry_data + 16;
 
 	//init be encrypt_data
 	memcpy(data,encry_data,16);
+	memset(encry_data,0,16);
 
+#if 0
+	printf("pvf_data:\n");
+	for(i = 0;i<data_len;i++)
+	{
+		printf("%02x ",data[i]);
+	}
+	printf("\n");
+
+	printf("key:\n");
+	for(i = 0;i<key_len;i++)
+	{
+		printf("%02x ",key[i]);
+	}
+	printf("\n");
+#endif
+
+	memset(out,0,out_len);
 	hmac_sha(key,key_len,data,data_len,out,out_len);
 
+#if 0
+	printf("pvf':\n");
+	for(i = 0;i<out_len;i++)
+	{
+		printf("%02x ",out[i]);
+	}
+	printf("\n");
+#endif
 	//cmp pvf1 and pvf2
 	for(i = 0;i<out_len;i++)
 	{
 		if(pvf2[i] != out[i])
 		{
 			printf("it is not equal\n");
+			equal_flag = 0;
 			break;
 		}
-		if(i == 15)
+		else
 		{
-			printf("it is equal\n");
-			equal_flag = 1;
+			if(i == 14)
+			{
+				printf("it is equal\n");
+				equal_flag = 1;
+			}
 		}
 	}
 	if(equal_flag == 1)
@@ -191,7 +263,25 @@ int main()
 		memset(out,0,16);
 
 		hmac_sha(key,key_len,data,data_len,out,out_len);
+		
+		printf("pvf'':\n");
+		for(i = 0;i<out_len;i++)
+		{
+			printf("%02x ",out[i]);
+		}
+		printf("\n");
+	
+		//copy pvf'' to replace pvf'
+		memcpy(encry_data+16,out,16);
 	}
+
+	//write tcp data 
+	fseek(fpp,dst_cur_point,SEEK_SET);	
+	////printf("--->tcpdata1 dst_point:%d\n",dst_cur_point);
+	printf("write tcp data len:%d\n",fwrite(tmp_buf,1,tcp_data_len,fpp));
+	free(tmp_buf);
+	dst_cur_point = dst_cur_point + tcp_data_len;
+	////printf("--->tcpdata2 dst_point:%d\n",dst_cur_point);
 
 
 	src_cur_point = src_cur_point + (packet_header->len - sizeof(struct ether_header) - sizeof(struct ipheader) - sizeof(struct tcphdr));
