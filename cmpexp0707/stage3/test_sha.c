@@ -18,25 +18,43 @@ unsigned char ip5[4] = {0xc0,0xa8,0x1,0x5};
 void main()
 {
 	int i = 0,j = 0;	
-	//initital key
-	memset(key,0,16);
-	memcpy(key,ip1,4);
 	
-	//initital data
-	memset(data,0,16);
 
-	//initital out
-	memset(out,0,16);
 
-	//initital data
-	memset(data,0,16);
-	memcpy(data,ip2,4);
-	memcpy(data+4,ip3,4);
-	memcpy(data+8,ip4,4);
-	memcpy(data+12,ip5,4);
+
 
 	for(i = 0;i<5;i++)
 	{
+	
+		//initital out
+		memset(out,0,16);
+		
+		//initital key
+		memset(key,0,16);
+		memcpy(key,ip1,4);
+	
+		//initital data
+		memset(data,0,16);
+		memcpy(data,ip2,4);
+		memcpy(data+4,ip3,4);
+		memcpy(data+8,ip4,4);
+		memcpy(data+12,ip5,4);
+
+		printf("key:");
+		for(j = 0;j<16;j++)
+		{
+			printf("%02x ",key[j]);
+		}
+		printf("\n");
+
+
+		printf("encry_data:");
+		for(j = 0;j<16;j++)
+		{
+			printf("%02x ",data[j]);
+		}
+		printf("\n");
+
 		hmac_sha(key,key_len,data,data_len,out,out_len);
 
 		printf("out %d:\n",out_len);
@@ -45,7 +63,7 @@ void main()
 			printf("%02x ",out[j]);
 		}
 		printf("\n");
-		memset(out,0,16);
+		printf("\n");
 	}
 
 }
