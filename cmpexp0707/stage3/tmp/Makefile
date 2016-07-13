@@ -1,10 +1,10 @@
-CC:=gcc 
+CC:=gcc
 CFLAGS:=-w -g
 OBJS:=stage3
 
 
 stage3:sha1.h HMACSHA1.c head.h stage3.c
-	$(CC)  $(CFLAGS) $^ -lpthread -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY:clean
 

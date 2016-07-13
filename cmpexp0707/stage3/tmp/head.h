@@ -70,7 +70,7 @@ struct ipheader {
 
 //tcp header
 
-struct tcpheader
+struct tcphdr
 {
     unsigned short int source;  
     unsigned short int dest;   

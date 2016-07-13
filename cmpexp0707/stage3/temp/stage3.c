@@ -10,6 +10,11 @@ void main()
 	long int src_point = NULL,dst_point = NULL;
 	int i = 0,count = 0,ip_total_len = 0,src_file_len = 0;
 
+	if((fps = fopen("cmp_ip.txt","r"))==NULL)
+	{
+		printf("open cmp_ip.txt file failure\n");
+		exit(0);
+	}
 	if((fps = fopen("../../stage2/mod100.pcap","r"))==NULL)
 	{
 		printf("open mod100.pcap file failure\n");
@@ -129,7 +134,7 @@ int stage3_process(unsigned char *temp_buf)
 {
 	unsigned char ip1[4] = {0xc0,0xa8,0x1,0x1};
 
-	int i = 0,equal_flag = 0;
+	int i = 0,equal_flag = 0,encry_data_len = 32;
 	
 	//variable about hmac_sha
 	unsigned char key[16] = {0x0};
@@ -149,8 +154,8 @@ int stage3_process(unsigned char *temp_buf)
 	//initital out
 	memset(out,0,16);
 	unsigned char *encry_data = malloc(encry_data_len);
-	memcpy(encry_data,temp_buff,encry_data_len);
-#if 1 
+	memcpy(encry_data,temp_buf,encry_data_len);
+#if 0 
 	printf("encry_data:pvf and pvf'\n");
 	for(i = 0;i<encry_data_len;i++)
 	{
@@ -162,9 +167,8 @@ int stage3_process(unsigned char *temp_buf)
 
 	//init be encrypt_data
 	memcpy(data,encry_data,16);
-	memset(encry_data,0,16);
 
-#if 1
+#if 0
 	printf("pvf_data:\n");
 	for(i = 0;i<data_len;i++)
 	{
@@ -183,7 +187,7 @@ int stage3_process(unsigned char *temp_buf)
 	memset(out,0,out_len);
 	hmac_sha(key,key_len,data,data_len,out,out_len);
 
-#if 1
+#if 0
 	printf("pvf':\n");
 	for(i = 0;i<out_len;i++)
 	{
@@ -232,5 +236,16 @@ int stage3_process(unsigned char *temp_buf)
 		//copy pvf'' to replace pvf'
 		memcpy(encry_data+16,out,16);
 	}
+
+#if 1 
+	printf("encry_data:pvf and pvf'\n");
+	for(i = 0;i<encry_data_len;i++)
+	{
+		printf("%02x ",encry_data[i]);
+	}
+	printf("\n");
 #endif
+
+	memcpy(temp_buf,encry_data,encry_data_len);
+
 }
