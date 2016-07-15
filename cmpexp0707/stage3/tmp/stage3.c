@@ -15,7 +15,10 @@ int main()
 	long int src_cur_point = 0,dst_cur_point = 0,file_len = 0,encry_data_len = 0,tcp_data_len = 0,count = 0;
 
 	int i = 0,equal_flag = 0;
-	
+
+
+
+
 	//variable about hmac_sha
 	unsigned char key[16] = {0x0};
 	unsigned char key_len = 16;

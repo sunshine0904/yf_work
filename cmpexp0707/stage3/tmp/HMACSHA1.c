@@ -101,7 +101,7 @@ void SHA1Update(SHA1_CTX* context, unsigned char* data, __u32 len)
     if ((j + len) > 63) {
 //        NdisMoveMemory(&context->buffer[j], data, (i = 64-j));
         memcpy(&context->buffer[j], data, (i = 64-j));
-        SHA1Transform(context->state, context->buffer);
+       // SHA1Transform(context->state, context->buffer);
         for ( ; i + 63 < len; i += 64) {
             SHA1Transform(context->state, &data[i]);
         }
@@ -192,7 +192,29 @@ void hmac_sha
 	int t
 )
 {
+
+#if 0
+	int j = 0;
+	printf("\n\nin hmac_sha:\n");
+	printf("key:");
+	for(j = 0;j<lk;j++)
+	{
+		printf("%02x ",((unsigned char *)k)[j]);
+	}
+	printf("\n");
+	printf("data:");
+	for(j = 0;j<ld;j++)
+	{
+		printf("%02x ",((unsigned char *)d)[j]);
+	}
+	printf("\n");
+	printf("out hmac_sha\n\n");
+#endif	
+
+
 	SHA1_CTX ictx, octx ;
+	memset(&ictx,0,9);//add by sjl0714
+	memset(&octx,0,9);//add by sjl0714
 	char isha[SHA_DIGESTSIZE], osha[SHA_DIGESTSIZE] ;
 	char key[SHA_DIGESTSIZE] ;
 	char buf[SHA_BLOCKSIZE] ;
@@ -201,6 +223,7 @@ void hmac_sha
 	if (lk > SHA_BLOCKSIZE) {
 
 	SHA1_CTX tctx ;
+	memset(&tctx,0,9);//add by sjl0714
 
 	SHA1Init(&tctx) ;
 	SHA1Update(&tctx, k, lk) ;
@@ -208,7 +231,7 @@ void hmac_sha
 
 	k = key ;
 	lk = SHA_DIGESTSIZE ;
-}
+	}
 
 /**** Inner Digest ****/
 
@@ -232,23 +255,24 @@ void hmac_sha
 	for (i = 0 ; i < lk ; ++i) buf[i] = k[i] ^ 0x5C ;
 	for (i = lk ; i < SHA_BLOCKSIZE ; ++i) buf[i] = 0x5C ;
 
-	SHA1Update(&octx, buf, SHA_BLOCKSIZE) ;
-	SHA1Update(&octx, isha, SHA_DIGESTSIZE) ;
+	SHA1Update(&octx, buf, SHA_BLOCKSIZE);
+	SHA1Update(&octx, isha, SHA_DIGESTSIZE);
 
 	SHA1Final(osha, &octx) ;
 
 /* truncate and print the results */
 	t = t > SHA_DIGESTSIZE ? SHA_DIGESTSIZE : t ;
 	truncate(osha, out, t) ;
-	//pr_sha(stdout, out, t) ;
-
+	pr_sha(stdout, out, t) ;
 }
 
 #if 0
 int main()
 {
 	char k[1024],d[1024],out[1024];
-	int lk,ld,t;
+	int lk,ld,t,i = 0;
+	
+	for(i = 0;i<5;i++){
 	strcpy(d,"what do ya want for nothing?");
 	strcpy(k,"Jefe");
 	lk=strlen(k);
@@ -256,8 +280,9 @@ int main()
 	printf("lk=%d\n",lk);
 	printf("ld=%d\n",ld);
 	t=20;
+
 	hmac_sha(k,lk,d,ld,out,t);
-	
+	}
 	system("pause");
 	return 0;
 }

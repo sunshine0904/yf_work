@@ -3,7 +3,7 @@ CFLAGS:=-w -g
 OBJS:=stage3
 
 
-stage3:sha1.h HMACSHA1.c head.h stage3.c
+stage3:aes_lib.h aes_lib.c head.h stage3.c
 	$(CC)  $(CFLAGS) $^ -lpthread -o $@
 
 .PHONY:clean

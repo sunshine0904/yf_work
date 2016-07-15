@@ -18,13 +18,14 @@ unsigned char ip5[4] = {0xc0,0xa8,0x1,0x5};
 void main()
 {
 	int i = 0,j = 0;	
+	SHA1_CTX ictx,octx,tctx;	
 	
-
-
-
 
 	for(i = 0;i<5;i++)
 	{
+		SHA1Init(&ictx);
+		SHA1Init(&octx);
+		SHA1Init(&tctx);
 	
 		//initital out
 		memset(out,0,16);
@@ -43,7 +44,7 @@ void main()
 		printf("key:");
 		for(j = 0;j<16;j++)
 		{
-			printf("%02x ",key[j]);
+			printf("%02x ",((unsigned char *)key)[j]);
 		}
 		printf("\n");
 
@@ -51,7 +52,7 @@ void main()
 		printf("encry_data:");
 		for(j = 0;j<16;j++)
 		{
-			printf("%02x ",data[j]);
+			printf("%02x ",((unsigned char *)data)[j]);
 		}
 		printf("\n");
 

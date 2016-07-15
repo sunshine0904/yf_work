@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "head.h"
-#include "sha1.h"
+#include "aes_lib.h"
 
 void main()
 {
@@ -19,7 +19,7 @@ void main()
 		exit(0);
 	}
 	//if((fps = fopen("../stage2/mod100.pcap","r"))==NULL)
-	if((fps = fopen("../stage2/mod10.pcap","r"))==NULL)
+	if((fps = fopen("../../stage2/mod10.pcap","r"))==NULL)
 	{
 		printf("open mod100.pcap file failure\n");
 		exit(0);
@@ -184,6 +184,10 @@ int stage3_process(unsigned char *temp_buf)
 	unsigned char out[16] = {0x0};
 	unsigned char out_len = 16;
 
+	//aes
+  	unsigned char  expKey[4 * Nc * (Nr + 1)]; 
+
+
 	//initital key
 	memset(key,0,16);
 	memcpy(key,ip1,4);
@@ -225,7 +229,9 @@ int stage3_process(unsigned char *temp_buf)
 #endif
 
 	memset(out,0,out_len);
-	hmac_sha(key,key_len,data,data_len,out,out_len);
+	//hmac_sha(key,key_len,data,data_len,out,out_len);
+	AES_ExpandKey(key,expKey);  
+	AES_Encrypt(data,expKey,out);
 
 #if 1
 	printf("pvf':\n");
@@ -282,7 +288,8 @@ int stage3_process(unsigned char *temp_buf)
 		}
 		printf("\n");
 
-		hmac_sha(key,key_len,data,data_len,out,out_len);
+		//hmac_sha(key,key_len,data,data_len,out,out_len);
+		AES_Encrypt(data,expKey,out);
 		
 #if 1
 		printf("pvf'':\n");
