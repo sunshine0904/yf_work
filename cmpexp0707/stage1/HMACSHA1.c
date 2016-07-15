@@ -101,7 +101,7 @@ void SHA1Update(SHA1_CTX* context, unsigned char* data, __u32 len)
     if ((j + len) > 63) {
 //        NdisMoveMemory(&context->buffer[j], data, (i = 64-j));
         memcpy(&context->buffer[j], data, (i = 64-j));
-        SHA1Transform(context->state, context->buffer);
+        //SHA1Transform(context->state, context->buffer);
         for ( ; i + 63 < len; i += 64) {
             SHA1Transform(context->state, &data[i]);
         }

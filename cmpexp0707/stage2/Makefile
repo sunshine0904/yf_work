@@ -10,5 +10,5 @@ stage2:head.h stage2.c
 .PHONY:clean
 
 clean:
-	-rm $(OBJS) *.gch mod100.pcap
+	-rm $(OBJS) *.gch mod10.pcap
 
