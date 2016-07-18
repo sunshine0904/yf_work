@@ -8,7 +8,7 @@ int main()
 	int i = 0,len = 0;
 	unsigned char *buff = NULL;
 
-	if((fp = fopen("output.txt","r")) == NULL)
+	if((fp = fopen("mod10.pcap","r")) == NULL)
 	{
 		printf("open failed");
 		exit(0);

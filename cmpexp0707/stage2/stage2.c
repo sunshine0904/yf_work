@@ -34,7 +34,7 @@ int main(int argc,char **argv)
 		printf("open 10.pcap file failure\n");
 		exit(0);
 	}
-	if((fps = fopen("../stage1/aes_temp/output.txt","r"))==NULL)
+	if((fps = fopen("../stage1/output.txt","r"))==NULL)
 	{
 		printf("open output.txt file failure\n");
 		exit(0);

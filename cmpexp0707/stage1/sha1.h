@@ -3,7 +3,7 @@
 #define _IPSEC_SHA1_H_
 
 
-typedef unsigned long	__u32;
+typedef unsigned int	__u32;
 typedef unsigned char	__u8;
 
 typedef struct
