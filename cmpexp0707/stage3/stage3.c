@@ -4,6 +4,9 @@
 #include "head.h"
 #include "sha1.h"
 
+#define DEBUG 0
+
+
 void main()
 {
 	FILE *fps,*fpd;	
@@ -55,7 +58,7 @@ void main()
 	memset(pcaphdr,0,sizeof(struct pcap_header));
 
 	
-#if 0
+#if 1
 	void cost_write_loop()
 	{
 		pid_t pid_tmp = 0;
@@ -195,7 +198,7 @@ int stage3_process(unsigned char *temp_buf)
 	memset(out,0,16);
 	unsigned char *encry_data = malloc(encry_data_len);
 	memcpy(encry_data,temp_buf,encry_data_len);
-#if 1 
+#if DEBUG 
 	printf("encry_data:pvf and pvf'\n");
 	for(i = 0;i<encry_data_len;i++)
 	{
@@ -208,7 +211,7 @@ int stage3_process(unsigned char *temp_buf)
 	//init be encrypt_data
 	memcpy(data,encry_data,16);
 
-#if 1
+#if DEBUG
 	printf("pvf_data:\n");
 	for(i = 0;i<data_len;i++)
 	{
@@ -227,7 +230,7 @@ int stage3_process(unsigned char *temp_buf)
 	memset(out,0,out_len);
 	hmac_sha(key,key_len,data,data_len,out,out_len);
 
-#if 1
+#if DEBUG
 	printf("pvf':\n");
 	for(i = 0;i<out_len;i++)
 	{
@@ -240,7 +243,7 @@ int stage3_process(unsigned char *temp_buf)
 	{
 		if(pvf2[i] != out[i])
 		{
-			printf("it is not equal\n");
+			//printf("it is not equal\n");
 			equal_flag = 0;
 			break;
 		}
@@ -248,7 +251,7 @@ int stage3_process(unsigned char *temp_buf)
 		{
 			if(i == 14)
 			{
-				printf("it is equal\n");
+				//printf("it is equal\n");
 				equal_flag = 1;
 			}
 		}
@@ -261,6 +264,7 @@ int stage3_process(unsigned char *temp_buf)
 		//initital out
 		memset(out,0,16);
 
+#if DEBUG
 		printf("key:\n");
 		for(i = 0;i<key_len;i++)
 		{
@@ -281,10 +285,11 @@ int stage3_process(unsigned char *temp_buf)
 			printf("%02x ",out[i]);
 		}
 		printf("\n");
+#endif
 
 		hmac_sha(key,key_len,data,data_len,out,out_len);
 		
-#if 1
+#if DEBUG
 		printf("pvf'':\n");
 		for(i = 0;i<out_len;i++)
 		{
@@ -292,11 +297,12 @@ int stage3_process(unsigned char *temp_buf)
 		}
 		printf("\n");
 #endif	
+
 		//copy pvf'' to replace pvf'
 		memcpy(encry_data+16,out,16);
 	}
 
-#if 1
+#if DEBUG
 	printf("encry_data:pvf and pvf'\n");
 	for(i = 0;i<encry_data_len;i++)
 	{
